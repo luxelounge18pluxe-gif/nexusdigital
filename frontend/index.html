@@ -2,10 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0;url=/signup.html">
-  <title>Redirecting...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Tools Marketplace</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+* { font-family: 'DM Sans', sans-serif; }
+html, body { height: 100%; margin: 0; }
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.card-hover { transition: transform 0.2s, box-shadow 0.2s; }
+.card-hover:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+.cat-btn { transition: all 0.15s; }
+.cat-btn.active { background: var(--primary); color: #fff; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.animate-fade-in { animation: fadeIn 0.3s ease-out; }
+</style>
 </head>
-<body>
-  <p>Redirecting to <a href="/signup.html">Sign Up</a>...</p>
+<body class="h-full text-gray-100 overflow-auto hide-scrollbar" style="background: linear-gradient(135deg, #0f1117 0%, #1a1d27 50%, #0a0e18 100%);">
+  <div id="app" class="w-full h-full flex flex-col" style="--bg:#0f1117;--surface:#1a1d27;--text:#e2e4ea;--primary:#6c5ce7;--secondary:#a29bfe;">
+    <header class="px-5 pt-5 pb-3 flex items-center justify-between flex-shrink-0">
+      <div class="flex items-center gap-3">
+        <h1 class="text-lg font-bold" style="color:var(--text)">AI Tools Marketplace</h1>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="/signin.html" class="px-4 py-2 rounded text-sm font-medium" style="background:var(--surface);color:var(--text)">Sign In</a>
+        <a href="/signup.html" class="px-4 py-2 rounded text-sm font-medium text-white" style="background:var(--primary)">Sign Up</a>
+      </div>
+    </header>
+    <main class="flex-1 flex items-center justify-center">
+      <div class="text-center">
+        <h2 class="text-3xl font-bold mb-4">Welcome to AI Tools Marketplace</h2>
+        <p class="mb-6 opacity-70">Sign up to get started</p>
+        <a href="/signup.html" class="px-6 py-3 rounded-lg text-white font-medium inline-block" style="background:var(--primary)">Get Started</a>
+      </div>
+    </main>
+  </div>
 </body>
 </html>
