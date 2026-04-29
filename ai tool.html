@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Tools Marketplace</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+* { font-family: 'DM Sans', sans-serif; }
+html, body { height: 100%; margin: 0; }
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.card-hover { transition: transform 0.2s, box-shadow 0.2s; }
+.card-hover:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+.cat-btn { transition: all 0.15s; }
+.cat-btn.active { background: var(--primary); color: #fff; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.animate-fade-in { animation: fadeIn 0.3s ease-out; }
+</style>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full text-gray-100 overflow-auto hide-scrollbar" style="background: linear-gradient(135deg, #0f1117 0%, #1a1d27 50%, #0a0e18 100%);">
+  <div id="app" class="w-full h-full flex flex-col" style="--bg:#0f1117;--surface:#1a1d27;--text:#e2e4ea;--primary:#6c5ce7;--secondary:#a29bfe;"><!-- Header -->
+   <header class="px-5 pt-5 pb-3 flex items-center justify-between flex-shrink-0">
+    <div class="flex items-center gap-3">
+     <h1 id="pageTitle" class="text-lg font-bold" style="color:var(--text)">Welcome back!</h1>
+    </div>
+    <div class="flex items-center gap-3">
+     <div class="px-3 py-1.5 rounded-xl text-sm font-semibold" style="background:var(--surface);color:var(--primary)">
+      $1,250.00
+     </div><button class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:var(--surface)"><i data-lucide="user" class="w-4 h-4" style="color:var(--secondary)"></i></button>
+     <button id="logoutBtn" class="px-3 py-1.5 rounded-xl text-sm font-semibold" style="background:var(--surface);color:var(--primary)">Logout</button>
+    </div>
+   </header><!-- Categories -->
+   <div class="px-5 pb-3 flex-shrink-0">
+    <p class="text-xs font-semibold mb-2 opacity-50">Categories:</p>
+    <div class="flex gap-2 flex-wrap" id="catContainer"><button class="cat-btn active px-3 py-1.5 rounded-lg text-xs font-medium" style="background:var(--surface);color:var(--secondary)" data-cat="All">All</button> <button class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium" style="background:var(--surface);color:var(--secondary)" data-cat="Web Builder">Web Builder</button> <button class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium" style="background:var(--surface);color:var(--secondary)" data-cat="Numbers">Numbers</button> <button class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium" style="background:var(--surface);color:var(--secondary)" data-cat="Design">Design</button> <button class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium" style="background:var(--surface);color:var(--secondary)" data-cat="Log">Log</button>
+    </div>
+   </div><!-- Tools Grid -->
+   <div class="px-5 pb-5 flex-grow overflow-auto hide-scrollbar">
+    <div id="toolsGrid" class="grid grid-cols-1 gap-3"></div>
+    <p id="noResults" class="hidden text-center py-10 opacity-40 text-sm">No tools found</p>
+    <div id="smsLogSection" class="hidden px-5 pb-5">
+      <div style="background:var(--surface);border:1px solid rgba(255,255,255,0.08);" class="p-4 rounded-2xl">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h2 class="text-sm font-semibold" style="color:var(--text)">SMS Log</h2>
+            <p class="text-xs opacity-50">Messages from the number you bought in Design.</p>
+          </div>
+        </div>
+        <div id="smsLogList" class="space-y-3">
+          <p class="text-xs opacity-50">Select a Design tool to receive a message from the number you bought.</p>
+        </div>
+      </div>
+    </div>
+   </div>
+   <div class="px-5 pb-3 flex-shrink-0">
+    <button id="openSettingsBtn" class="px-4 py-2 rounded-lg text-sm font-medium text-white transition-all hover:opacity-90" style="background:var(--primary)">Settings</button>
+  </div>
+
+  <!-- Settings Page -->
+  <div id="settingsPage" class="hidden w-full h-full flex flex-col" style="background: linear-gradient(135deg, #0f1117 0%, #1a1d27 50%, #0a0e18 100%);">
+    <header class="px-5 pt-5 pb-3 flex items-center justify-between flex-shrink-0 border-b border-opacity-10" style="border-color:var(--secondary)">
+      <h1 id="pageTitle" class="text-lg font-bold" style="color:var(--text)">Settings</h1>
+      <button id="backFromSettingsBtn" class="px-4 py-2 rounded-lg text-sm font-medium" style="background:var(--surface);color:var(--secondary)">Back</button>
+    </header>
+    
+    <div class="flex-1 overflow-y-auto hide-scrollbar px-8 py-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
+        
+        <!-- Account Card -->
+        <div style="background:var(--surface)" class="p-5 rounded-lg border border-opacity-10" style="border-color:var(--secondary)">
+          <h3 style="color:var(--text)" class="text-lg font-semibold mb-4">Account</h3>
+          <div class="space-y-3">
+            <div>
+              <p style="color:var(--secondary)" class="text-xs opacity-75">Username</p>
+              <p style="color:var(--text)" class="text-sm">John Doe</p>
+            </div>
+            <div>
+              <p style="color:var(--secondary)" class="text-xs opacity-75">Email</p>
+              <p style="color:var(--text)" class="text-sm">john@example.com</p>
+            </div>
+            <button id="editProfileBtn" style="background:var(--primary);color:white" class="w-full mt-2 px-3 py-1.5 rounded text-xs font-medium transition-all hover:opacity-90">Edit Profile</button>
+          </div>
+        </div>
+
+        <!-- Wallet & Billing Card -->
+        <div style="background:var(--surface)" class="p-5 rounded-lg border border-opacity-10" style="border-color:var(--secondary)">
+          <h3 style="color:var(--text)" class="text-lg font-semibold mb-4">Wallet & Billing</h3>
+          <div class="space-y-3">
+            <div>
+              <p style="color:var(--secondary)" class="text-xs opacity-75">Balance</p>
+              <p style="color:var(--text)" class="text-lg font-bold">$1,250.00</p>
+            </div>
+            <button id="manageBillingBtn" style="background:var(--primary);color:white" class="w-full mt-2 px-3 py-1.5 rounded text-xs font-medium transition-all hover:opacity-90">Manage</button>
+          </div>
+        </div>
+
+        <!-- Notifications Card -->
+        <div style="background:var(--surface)" class="p-5 rounded-lg border border-opacity-10" style="border-color:var(--secondary)">
+          <h3 style="color:var(--text)" class="text-lg font-semibold mb-4">Notifications</h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <p style="color:var(--secondary)" class="text-xs opacity-75">Email</p>
+              <input type="checkbox" class="rounded" style="accent-color:var(--primary)">
+            </div>
+            <div class="flex items-center justify-between">
+              <p style="color:var(--secondary)" class="text-xs opacity-75">Push</p>
+              <input type="checkbox" class="rounded" style="accent-color:var(--primary)" checked>
+            </div>
+            <div class="flex items-center justify-between">
+              <p style="color:var(--secondary)" class="text-xs opacity-75">SMS</p>
+              <input type="checkbox" class="rounded" style="accent-color:var(--primary)">
+            </div>
+          </div>
+        </div>
+
+        <!-- About / Legal Card -->
+        <div style="background:var(--surface)" class="p-5 rounded-lg border border-opacity-10" style="border-color:var(--secondary)">
+          <h3 style="color:var(--text)" class="text-lg font-semibold mb-4">About</h3>
+          <div class="space-y-3">
+            <div>
+              <p style="color:var(--secondary)" class="text-xs opacity-75">Version</p>
+              <p style="color:var(--text)" class="text-sm">v2.1.0</p>
+            </div>
+            <div>
+              <p style="color:var(--secondary)" class="text-xs opacity-75">Last Updated</p>
+              <p style="color:var(--text)" class="text-sm">April 22, 2026</p>
+            </div>
+            <button style="background:var(--primary);color:white" class="w-full mt-2 px-3 py-1.5 rounded text-xs font-medium transition-all hover:opacity-90">Details</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+        <!-- Wallet & Payment Section -->
+        <div id="wallet-section" class="settings-section space-y-6 hidden">
+          <h2 style="color:var(--text)" class="text-xl font-semibold mb-4">Wallet & Payment</h2>
+          <div class="space-y-4">
+            <div style="background:var(--surface)" class="p-4 rounded-lg">
+              <label style="color:var(--text)" class="block text-sm font-medium mb-2">Wallet Balance</label>
+              <p style="color:var(--text)" class="text-2xl font-bold">$1,250.00</p>
+            </div>
+            <div style="background:var(--surface)" class="p-4 rounded-lg">
+              <label style="color:var(--text)" class="block text-sm font-medium mb-2">Payment Methods</label>
+              <button style="background:var(--primary);color:white" class="px-4 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-90">+ Add Payment Method</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notification Section -->
+        <div id="notification-section" class="settings-section space-y-6 hidden">
+          <h2 style="color:var(--text)" class="text-xl font-semibold mb-4">Notification Settings</h2>
+          <div class="space-y-4">
+            <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
+              <label style="color:var(--text)" class="text-sm font-medium">Email Notifications</label>
+              <input type="checkbox" class="rounded" style="accent-color:var(--primary)">
+            </div>
+            <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
+              <label style="color:var(--text)" class="text-sm font-medium">Push Notifications</label>
+              <input type="checkbox" class="rounded" style="accent-color:var(--primary)" checked>
+            </div>
+            <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
+              <label style="color:var(--text)" class="text-sm font-medium">SMS Notifications</label>
+              <input type="checkbox" class="rounded" style="accent-color:var(--primary)">
+            </div>
+          </div>
+        </div>
+
+        <!-- Appearance Section -->
+        <div id="appearance-section" class="settings-section space-y-6 hidden">
+          <h2 style="color:var(--text)" class="text-xl font-semibold mb-4">Appearance Settings</h2>
+          <div class="space-y-4">
+            <div style="background:var(--surface)" class="p-4 rounded-lg">
+              <label style="color:var(--text)" class="block text-sm font-medium mb-2">Theme</label>
+              <select class="w-full px-3 py-2 rounded-lg text-sm" style="background:var(--bg);color:var(--text);">
+                <option value="dark">Dark</option>
+                <option value="light">Light</option>
+                <option value="auto">Auto</option>
+              </select>
+            </div>
+            <div style="background:var(--surface)" class="p-4 rounded-lg">
+              <label style="color:var(--text)" class="block text-sm font-medium mb-2">Font Size</label>
+              <select class="w-full px-3 py-2 rounded-lg text-sm" style="background:var(--bg);color:var(--text);">
+                <option value="small">Small</option>
+                <option value="normal">Normal</option>
+                <option value="large">Large</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Billing & Subscription Section -->
+        <div id="billing-section" class="settings-section space-y-6 hidden">
+          <h2 style="color:var(--text)" class="text-xl font-semibold mb-4">Billing & Subscription</h2>
+          <div class="space-y-4">
+            <div style="background:var(--surface)" class="p-4 rounded-lg">
+              <label style="color:var(--text)" class="block text-sm font-medium mb-2">Current Plan</label>
+              <p style="color:var(--secondary)" class="text-lg font-semibold">Premium</p>
+            </div>
+            <div style="background:var(--surface)" class="p-4 rounded-lg">
+              <label style="color:var(--text)" class="block text-sm font-medium mb-2">Renewal Date</label>
+              <p style="color:var(--text)">April 30, 2026</p>
+            </div>
+            <button style="background:var(--primary);color:white" class="px-4 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-90">Manage Subscription</button>
+          </div>
+        </div>
+
+        <!-- App Preference Section -->
+        <div id="app-preference-section" class="settings-section space-y-6 hidden">
+          <h2 style="color:var(--text)" class="text-xl font-semibold mb-4">App Preference</h2>
+          <div class="space-y-4">
+            <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
+              <label style="color:var(--text)" class="text-sm font-medium">Auto-Update</label>
+              <input type="checkbox" class="rounded" style="accent-color:var(--primary)" checked>
+            </div>
+            <div style="background:var(--surface)" class="p-4 rounded-lg">
+              <label style="color:var(--text)" class="block text-sm font-medium mb-2">Default Currency</label>
+              <select class="w-full px-3 py-2 rounded-lg text-sm" style="background:var(--bg);color:var(--text);">
+                <option value="usd">USD ($)</option>
+                <option value="eur">EUR (€)</option>
+                <option value="gbp">GBP (£)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Preferences Section -->
+        <div id="ai-preferences-section" class="settings-section space-y-6 hidden">
+          <h2 style="color:var(--text)" class="text-xl font-semibold mb-4">AI Preferences</h2>
+          <div class="space-y-4">
+            <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
+              <label style="color:var(--text)" class="text-sm font-medium">AI Recommendations</label>
+              <input type="checkbox" class="rounded" style="accent-color:var(--primary)" checked>
+            </div>
+            <div style="background:var(--surface)" class="p-4 rounded-lg">
+              <label style="color:var(--text)" class="block text-sm font-medium mb-2">Preferred AI Model</label>
+              <select class="w-full px-3 py-2 rounded-lg text-sm" style="background:var(--bg);color:var(--text);">
+                <option>GPT-4</option>
+                <option>Claude 3</option>
+                <option>Gemini Pro</option>
+              </select>
+            </div>
+            <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
+              <label style="color:var(--text)" class="text-sm font-medium">Data Training Opt-in</label>
+              <input type="checkbox" class="rounded" style="accent-color:var(--primary)">
+            </div>
+          </div>
+        </div>
+
+        <!-- Integrations Section -->
+        <div id="integrations-section" class="settings-section space-y-6 hidden">
+          <h2 style="color:var(--text)" class="text-xl font-semibold mb-4">Integrations</h2>
+          <div class="space-y-4">
+            <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
+              <div>
+                <label style="color:var(--text)" class="block text-sm font-medium">Slack</label>
+                <p style="color:var(--secondary)" class="text-xs">Send notifications to Slack</p>
+              </div>
+              <button style="background:var(--primary);color:white" class="px-3 py-1 rounded text-xs font-medium">Connect</button>
+            </div>
+            <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
+              <div>
+                <label style="color:var(--text)" class="block text-sm font-medium">Discord</label>
+                <p style="color:var(--secondary)" class="text-xs">Get alerts on Discord</p>
+              </div>
+              <button style="background:var(--primary);color:white" class="px-3 py-1 rounded text-xs font-medium">Connect</button>
+            </div>
+            <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
+              <div>
+                <label style="color:var(--text)" class="block text-sm font-medium">Zapier</label>
+                <p style="color:var(--secondary)" class="text-xs">Automate workflows</p>
+              </div>
+              <button style="background:var(--primary);color:white" class="px-3 py-1 rounded text-xs font-medium">Connect</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Support Section -->
+        <div id="support-section" class="settings-section space-y-6 hidden">
+          <h2 style="color:var(--text)" class="text-xl font-semibold mb-4">Support</h2>
+          <div class="space-y-4">
+            <button style="background:var(--surface);color:var(--secondary)" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80">Documentation</button>
+            <button style="background:var(--surface);color:var(--secondary)" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80">Contact Support</button>
+            <button style="background:var(--surface);color:var(--secondary)" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80">Report Bug</button>
+            <button style="background:var(--surface);color:var(--secondary)" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80">FAQ</button>
+          </div>
+        </div>
+
+        <!-- About / Legal Section -->
+        <div id="legal-section" class="settings-section space-y-6 hidden">
+          <h2 style="color:var(--text)" class="text-xl font-semibold mb-4">About / Legal</h2>
+          <div class="space-y-4">
+            <div style="background:var(--surface)" class="p-4 rounded-lg">
+              <label style="color:var(--text)" class="block text-sm font-medium mb-2">App Version</label>
+              <p style="color:var(--text)">v2.1.0</p>
+            </div>
+            <button style="background:var(--surface);color:var(--secondary)" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80">Terms of Service</button>
+            <button style="background:var(--surface);color:var(--secondary)" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80">Privacy Policy</button>
+            <button style="background:var(--surface);color:var(--secondary)" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80">License</button>
+            <button style="background:var(--surface);color:var(--secondary)" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80">Credits</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+const tools = [
+  // Web Builder section
+  { name:"Wix AI", cat:"Web Builder", rating:4.6, price:"$300/yr", desc:"AI-powered website builder", features:["Drag & drop","AI design","Mobile ready"], icon:"layout" }
+];
+
+// Load tools from localStorage on startup
+function loadToolsFromStorage() {
+  const stored = localStorage.getItem('aiToolsData');
+  if (stored) {
+    tools.length = 0;
+    tools.push(...JSON.parse(stored));
+  }
+}
+
+let activeCat = "All";
+
+function createCard(t) {
+  const d = document.createElement('div');
+  d.className = 'card-hover rounded-xl p-4 cursor-pointer';
+  d.style.background = 'var(--surface)';
+  const logoImg = t.logo ? `<img src="${t.logo}" alt="${t.name}" style="width:40px;height:40px;border-radius:6px;object-fit:cover;">` : `<div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:var(--primary)"><i data-lucide="${t.icon}" class="w-5 h-5 text-white"></i></div>`;
+  d.innerHTML = `
+    <div class="flex items-start justify-between mb-3">
+      ${logoImg}
+      <span class="text-xs font-medium px-2 py-0.5 rounded-full" style="background:rgba(108,92,231,0.15);color:var(--secondary)">${t.cat}</span>
+    </div>
+    <h3 class="font-semibold text-sm mb-1 leading-tight" style="color:var(--text)">${t.name}</h3>
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xs font-bold" style="color:var(--primary)">${t.price}</span>
+    </div>
+    <p class="text-xs opacity-50 mb-3">${t.desc}</p>
+    <div class="space-y-1">
+      ${t.features.map(f=>`<p class="text-xs" style="color:var(--secondary)">✓ ${f}</p>`).join('')}
+    </div>`;
+  
+  // Add click handler for payment - only for Web Builder and Design categories
+  const paidCategories = ['Web Builder', 'Design'];
+  if (paidCategories.includes(t.cat)) {
+    d.addEventListener('click', () => showPaymentModal(t));
+  }
+  
+  return d;
+}
+
+function showPaymentModal(tool) {
+  const overlay = document.createElement('div');
+  overlay.className = 'fixed inset-0 z-50 flex items-center justify-center p-4';
+  overlay.style.background = 'rgba(0,0,0,0.7)';
+  
+  const box = document.createElement('div');
+  box.className = 'rounded-2xl w-full max-w-sm p-5';
+  box.style.background = 'var(--surface)';
+  box.innerHTML = `
+    <h3 class="text-lg font-semibold mb-2" style="color:var(--text)">Confirm Purchase</h3>
+    <p class="text-sm mb-4" style="color:var(--secondary)">You are about to purchase:</p>
+    <div class="p-3 rounded-lg mb-4" style="background:rgba(108,92,231,0.1)">
+      <p class="font-semibold" style="color:var(--text)">${tool.name}</p>
+      <p class="text-sm" style="color:var(--primary)">${tool.price}</p>
+    </div>
+    <p class="text-xs mb-4" style="color:var(--secondary)">Proceed to pay this amount?</p>
+    <div class="flex gap-3">
+      <button id="cancelPayBtn" class="flex-1 px-4 py-2 rounded-lg text-sm font-medium" style="background:rgba(255,255,255,0.06);color:var(--text)">Cancel</button>
+      <button id="confirmPayBtn" class="flex-1 px-4 py-2 rounded-lg text-sm font-medium text-white" style="background:var(--primary)">Yes, Pay</button>
+    </div>
+  `;
+  
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+  
+  // Cancel button
+  overlay.querySelector('#cancelPayBtn').addEventListener('click', () => overlay.remove());
+  
+  // Confirm payment button
+  overlay.querySelector('#confirmPayBtn').addEventListener('click', async () => {
+    // Show loading
+    overlay.querySelector('#confirmPayBtn').textContent = 'Processing...';
+    overlay.querySelector('#confirmPayBtn').disabled = true;
+    
+    // Simulate payment processing
+    await new Promise(r => setTimeout(r, 1500));
+    
+    // Get user info
+    let userEmail = 'Unknown';
+    try {
+      const user = JSON.parse(localStorage.getItem('auth_user'));
+      if (user && user.email) userEmail = user.email;
+    } catch(e) {}
+    
+    // Add to SMS log
+    const logMessage = `Payment successful! You have purchased ${tool.name} for ${tool.price}. Login credentials will be sent to your registered email.`;
+    addSmsLog('System', logMessage);
+    
+    // Show success
+    box.innerHTML = `
+      <div class="text-center py-4">
+        <div class="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style="background:rgba(134,239,172,0.2)">
+          <svg class="w-8 h-8" fill="none" stroke="#86efac" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <h3 class="text-lg font-semibold mb-2" style="color:var(--text)">Payment Successful!</h3>
+        <p class="text-sm mb-2" style="color:var(--secondary)">${tool.name} - ${tool.price}</p>
+        <p class="text-xs" style="color:var(--secondary)">Logins will be sent to your email</p>
+      </div>
+    `;
+    
+    // Auto close after 2 seconds
+    setTimeout(() => overlay.remove(), 2500);
+  });
+  
+  // Close on overlay click
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+}
+
+function render() {
+  const grid = document.getElementById('toolsGrid');
+  const nr = document.getElementById('noResults');
+  grid.innerHTML = '';
+  const filtered = tools.filter(t => {
+    const catMatch = activeCat === 'All' || t.cat === activeCat;
+    return catMatch;
+  });
+  if (activeCat === 'Log') {
+    grid.innerHTML = '';
+    nr.classList.add('hidden');
+  } else {
+    if (!filtered.length) { nr.classList.remove('hidden'); }
+    else { nr.classList.add('hidden'); filtered.forEach(t => grid.appendChild(createCard(t))); }
+  }
+  lucide.createIcons();
+  renderSmsLog();
+}
+
+function renderSmsLog() {
+  const section = document.getElementById('smsLogSection');
+  const list = document.getElementById('smsLogList');
+  if (!section || !list) return;
+  if (activeCat !== 'Log') {
+    section.classList.add('hidden');
+    return;
+  }
+  section.classList.remove('hidden');
+  if (!smsLogs.length) {
+    list.innerHTML = `<p class="text-xs opacity-50">Select a Design tool to receive a message from the number you bought.</p>`;
+    return;
+  }
+  list.innerHTML = smsLogs.map(log => `
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);" class="p-3 rounded-xl">
+        <div class="text-[11px] uppercase tracking-[0.2em] opacity-50 mb-2">${log.time}</div>
+        <p class="text-sm" style="color:var(--text)"><strong>SMS from ${log.number}</strong></p>
+        <p class="text-xs opacity-70 mt-2">${log.message}</p>
+      </div>
+    `).join('');
+}
+
+function addSmsLog(number, message) {
+  const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  smsLogs.unshift({ number, message, time });
+  renderSmsLog();
+}
+
+// Categories
+document.getElementById('catContainer').addEventListener('click', e => {
+  const btn = e.target.closest('[data-cat]');
+  if (!btn) return;
+  activeCat = btn.dataset.cat;
+  document.querySelectorAll('.cat-btn').forEach(b => { b.classList.remove('active'); b.style.background='var(--surface)'; b.style.color='var(--secondary)'; });
+  btn.classList.add('active');
+  render();
+});
+
+// Country selection modal for Numbers section with flags
+let currentTool = null;
+const smsLogs = [];
+
+// Define price tiers
+const europeanCountries = ["AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE","GR","HU","IE","IT","LV","LT","LU","MT","NL","PL","PT","RO","SK","SI","ES","SE"];
+const americanCountries = ["US","CA","MX","BR","AR","CL","CO"];
+
+const countryData = [
+  {name:"Afghanistan",code:"AF"},{name:"Albania",code:"AL"},{name:"Algeria",code:"DZ"},{name:"Andorra",code:"AD"},{name:"Angola",code:"AO"},{name:"Argentina",code:"AR"},{name:"Armenia",code:"AM"},{name:"Australia",code:"AU"},{name:"Austria",code:"AT"},{name:"Azerbaijan",code:"AZ"},{name:"Bahamas",code:"BS"},{name:"Bahrain",code:"BH"},{name:"Bangladesh",code:"BD"},{name:"Barbados",code:"BB"},{name:"Belarus",code:"BY"},{name:"Belgium",code:"BE"},{name:"Belize",code:"BZ"},{name:"Benin",code:"BJ"},{name:"Bhutan",code:"BT"},{name:"Bolivia",code:"BO"},{name:"Bosnia and Herzegovina",code:"BA"},{name:"Botswana",code:"BW"},{name:"Brazil",code:"BR"},{name:"Brunei",code:"BN"},{name:"Bulgaria",code:"BG"},{name:"Burkina Faso",code:"BF"},{name:"Burundi",code:"BI"},{name:"Cambodia",code:"KH"},{name:"Cameroon",code:"CM"},{name:"Canada",code:"CA"},{name:"Cape Verde",code:"CV"},{name:"Central African Republic",code:"CF"},{name:"Chad",code:"TD"},{name:"Chile",code:"CL"},{name:"China",code:"CN"},{name:"Colombia",code:"CO"},{name:"Comoros",code:"KM"},{name:"Congo",code:"CG"},{name:"Costa Rica",code:"CR"},{name:"Croatia",code:"HR"},{name:"Cuba",code:"CU"},{name:"Cyprus",code:"CY"},{name:"Czech Republic",code:"CZ"},{name:"Czechia",code:"CZ"},{name:"Denmark",code:"DK"},{name:"Djibouti",code:"DJ"},{name:"Dominica",code:"DM"},{name:"Dominican Republic",code:"DO"},{name:"East Timor",code:"TL"},{name:"Ecuador",code:"EC"},{name:"Egypt",code:"EG"},{name:"El Salvador",code:"SV"},{name:"Equatorial Guinea",code:"GQ"},{name:"Eritrea",code:"ER"},{name:"Estonia",code:"EE"},{name:"Ethiopia",code:"ET"},{name:"Fiji",code:"FJ"},{name:"Finland",code:"FI"},{name:"France",code:"FR"},{name:"Gabon",code:"GA"},{name:"Gambia",code:"GM"},{name:"Georgia",code:"GE"},{name:"Germany",code:"DE"},{name:"Ghana",code:"GH"},{name:"Greece",code:"GR"},{name:"Grenada",code:"GD"},{name:"Guatemala",code:"GT"},{name:"Guinea",code:"GN"},{name:"Guinea-Bissau",code:"GW"},{name:"Guyana",code:"GY"},{name:"Haiti",code:"HT"},{name:"Honduras",code:"HN"},{name:"Hungary",code:"HU"},{name:"Iceland",code:"IS"},{name:"India",code:"IN"},{name:"Indonesia",code:"ID"},{name:"Iran",code:"IR"},{name:"Iraq",code:"IQ"},{name:"Ireland",code:"IE"},{name:"Israel",code:"IL"},{name:"Italy",code:"IT"},{name:"Jamaica",code:"JM"},{name:"Japan",code:"JP"},{name:"Jordan",code:"JO"},{name:"Kazakhstan",code:"KZ"},{name:"Kenya",code:"KE"},{name:"Kiribati",code:"KI"},{name:"Kosovo",code:"XK"},{name:"Kuwait",code:"KW"},{name:"Kyrgyzstan",code:"KG"},{name:"Laos",code:"LA"},{name:"Latvia",code:"LV"},{name:"Lebanon",code:"LB"},{name:"Lesotho",code:"LS"},{name:"Liberia",code:"LR"},{name:"Libya",code:"LY"},{name:"Liechtenstein",code:"LI"},{name:"Lithuania",code:"LT"},{name:"Luxembourg",code:"LU"},{name:"Madagascar",code:"MG"},{name:"Malawi",code:"MW"},{name:"Malaysia",code:"MY"},{name:"Maldives",code:"MV"},{name:"Mali",code:"ML"},{name:"Malta",code:"MT"},{name:"Marshall Islands",code:"MH"},{name:"Mauritania",code:"MR"},{name:"Mauritius",code:"MU"},{name:"Mexico",code:"MX"},{name:"Micronesia",code:"FM"},{name:"Moldova",code:"MD"},{name:"Monaco",code:"MC"},{name:"Mongolia",code:"MN"},{name:"Montenegro",code:"ME"},{name:"Morocco",code:"MA"},{name:"Mozambique",code:"MZ"},{name:"Myanmar",code:"MM"},{name:"Namibia",code:"NA"},{name:"Nauru",code:"NR"},{name:"Nepal",code:"NP"},{name:"Netherlands",code:"NL"},{name:"New Zealand",code:"NZ"},{name:"Nicaragua",code:"NI"},{name:"Niger",code:"NE"},{name:"Nigeria",code:"NG"},{name:"North Korea",code:"KP"},{name:"North Macedonia",code:"MK"},{name:"Norway",code:"NO"},{name:"Oman",code:"OM"},{name:"Pakistan",code:"PK"},{name:"Palau",code:"PW"},{name:"Palestine",code:"PS"},{name:"Panama",code:"PA"},{name:"Papua New Guinea",code:"PG"},{name:"Paraguay",code:"PY"},{name:"Peru",code:"PE"},{name:"Philippines",code:"PH"},{name:"Poland",code:"PL"},{name:"Portugal",code:"PT"},{name:"Qatar",code:"QA"},{name:"Romania",code:"RO"},{name:"Russia",code:"RU"},{name:"Rwanda",code:"RW"},{name:"Saint Kitts and Nevis",code:"KN"},{name:"Saint Lucia",code:"LC"},{name:"Saint Vincent and the Grenadines",code:"VC"},{name:"Samoa",code:"WS"},{name:"San Marino",code:"SM"},{name:"Sao Tome and Principe",code:"ST"},{name:"Saudi Arabia",code:"SA"},{name:"Senegal",code:"SN"},{name:"Serbia",code:"RS"},{name:"Seychelles",code:"SC"},{name:"Sierra Leone",code:"SL"},{name:"Singapore",code:"SG"},{name:"Slovakia",code:"SK"},{name:"Slovenia",code:"SI"},{name:"Solomon Islands",code:"SB"},{name:"Somalia",code:"SO"},{name:"South Africa",code:"ZA"},{name:"South Korea",code:"KR"},{name:"South Sudan",code:"SS"},{name:"Spain",code:"ES"},{name:"Sri Lanka",code:"LK"},{name:"Sudan",code:"SD"},{name:"Suriname",code:"SR"},{name:"Sweden",code:"SE"},{name:"Switzerland",code:"CH"},{name:"Syria",code:"SY"},{name:"Taiwan",code:"TW"},{name:"Tajikistan",code:"TJ"},{name:"Tanzania",code:"TZ"},{name:"Thailand",code:"TH"},{name:"Timor-Leste",code:"TL"},{name:"Togo",code:"TG"},{name:"Tonga",code:"TO"},{name:"Trinidad and Tobago",code:"TT"},{name:"Tunisia",code:"TN"},{name:"Turkey",code:"TR"},{name:"Turkmenistan",code:"TM"},{name:"Tuvalu",code:"TV"},{name:"Uganda",code:"UG"},{name:"Ukraine",code:"UA"},{name:"United Arab Emirates",code:"AE"},{name:"United Kingdom",code:"GB"},{name:"United States",code:"US"},{name:"Uruguay",code:"UY"},{name:"Uzbekistan",code:"UZ"},{name:"Vanuatu",code:"VU"},{name:"Vatican City",code:"VA"},{name:"Venezuela",code:"VE"},{name:"Vietnam",code:"VN"},{name:"Yemen",code:"YE"},{name:"Zambia",code:"ZM"},{name:"Zimbabwe",code:"ZW"}
+];
+
+function getCountryPrice(countryCode) {
+  if (europeanCountries.includes(countryCode) || americanCountries.includes(countryCode)) {
+    return "$9.99";
+  }
+  return "$4.99";
+}
+
+function getFlagEmoji(code) {
+  const codePoints = code
+    .toUpperCase()
+    .split('')
+    .map(char => 127397 + char.charCodeAt());
+  return String.fromCodePoint(...codePoints);
+}
+
+document.getElementById('toolsGrid').addEventListener('click', e => {
+  const card = e.currentTarget.querySelector('[data-tool-name]');
+  if (card) return;
+  const toolCard = e.target.closest('.card-hover');
+  if (!toolCard) return;
+  
+  const toolName = toolCard.querySelector('h3').textContent;
+  const tool = tools.find(t => t.name === toolName);
+  
+  if (!tool) return;
+  if (tool.cat === 'Numbers') {
+    currentTool = tool;
+    showCountryModal();
+    return;
+  }
+  if (tool.cat === 'Design') {
+    const boughtNumber = '+1 987-654-3210';
+    addSmsLog(boughtNumber, 'You received an SMS from the number you bought.');
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'fixed bottom-5 right-5 z-50 bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-fade-in';
+    msgDiv.innerHTML = `<i data-lucide="check-circle" class="w-5 h-5"></i><span>SMS log updated for Design tools. Check the SMS Log below.</span>`;
+    document.body.appendChild(msgDiv);
+    lucide.createIcons();
+    setTimeout(() => msgDiv.remove(), 4000);
+    return;
+  }
+});
+
+function showCountryModal() {
+  let modal = document.getElementById('countryModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'countryModal';
+    modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4';
+    modal.style.background = 'rgba(0,0,0,0.7)';
+    document.body.appendChild(modal);
+  }
+  
+  modal.innerHTML = `
+    <div class="bg-[#1a1d27] rounded-2xl w-full max-w-sm max-h-96 flex flex-col shadow-2xl border border-opacity-10" style="background:var(--surface);border-color:var(--primary)">
+      <div class="px-5 py-4 border-b border-opacity-20 bg-gradient-to-r from-transparent to-[rgba(108,92,231,0.1)]" style="border-color:var(--secondary)">
+        <h2 class="font-semibold text-base" style="color:var(--text)">Select Country for ${currentTool.name}</h2>
+        <p class="text-xs opacity-50 mt-1">Choose your location to proceed</p>
+      </div>
+      <div id="countryList" class="flex-1 overflow-y-auto hide-scrollbar px-3 py-3 space-y-1"></div>
+      <div class="px-5 py-3 border-t border-opacity-20 flex gap-2" style="border-color:var(--secondary)">
+        <button id="cancelBtn" class="flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-80" style="background:var(--surface);color:var(--secondary)">Cancel</button>
+        <button id="confirmBtn" class="flex-1 px-4 py-2 rounded-lg text-sm font-medium text-white transition-all hover:opacity-90" style="background:var(--primary)">Confirm</button>
+      </div>
+    </div>`;
+  
+  const countryList = document.getElementById('countryList');
+  let selectedCountry = null;
+  let selectedCode = null;
+  
+  countryData.forEach(country => {
+    const btn = document.createElement('button');
+    btn.className = 'w-full text-left px-3 py-2.5 rounded-lg text-sm transition-all hover:opacity-80 flex items-center justify-between';
+    const flag = getFlagEmoji(country.code);
+    const price = getCountryPrice(country.code);
+    btn.innerHTML = `<div class="flex items-center gap-2"><span class="text-lg">${flag}</span><span>${country.name}</span></div><span class="text-xs font-medium opacity-75">${price}</span>`;
+    btn.style.color = 'var(--text)';
+    btn.style.border = '1px solid transparent';
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#countryList button').forEach(b => {
+        b.style.background = 'transparent';
+        b.style.color = 'var(--text)';
+        b.style.border = '1px solid transparent';
+      });
+      btn.style.background = 'var(--primary)';
+      btn.style.color = 'white';
+      btn.style.border = '1px solid rgba(255,255,255,0.25)';
+      selectedCountry = country.name;
+      selectedCode = country.code;
+    });
+    countryList.appendChild(btn);
+  });
+  
+  document.getElementById('cancelBtn').addEventListener('click', () => modal.remove());
+  document.getElementById('confirmBtn').addEventListener('click', () => {
+    if (selectedCountry) {
+      const price = getCountryPrice(selectedCode);
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'fixed bottom-5 right-5 z-50 bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-fade-in';
+      msgDiv.innerHTML = `<i data-lucide="check-circle" class="w-5 h-5"></i><span>${price} will be deducted from your account for ${selectedCountry}, and your number will be sent to your message log.</span>`;
+      document.body.appendChild(msgDiv);
+      lucide.createIcons();
+      setTimeout(() => msgDiv.remove(), 4000);
+      modal.remove();
+      currentTool = null;
+    }
+  });
+}
+
+// Settings Page Handlers
+document.getElementById('openSettingsBtn').addEventListener('click', () => {
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('settingsPage').classList.remove('hidden');
+});
+
+document.getElementById('backFromSettingsBtn').addEventListener('click', () => {
+  document.getElementById('settingsPage').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+});
+
+// Edit Profile and Manage Billing handlers
+function createModal(innerHTML) {
+  const overlay = document.createElement('div');
+  overlay.className = 'fixed inset-0 z-60 flex items-center justify-center p-4';
+  overlay.style.background = 'rgba(0,0,0,0.6)';
+  const box = document.createElement('div');
+  box.className = 'bg-[#1a1d27] rounded-2xl w-full max-w-md p-5';
+  box.style.background = 'var(--surface)';
+  box.innerHTML = innerHTML;
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+  return overlay;
+}
+
+function showToast(message, bgColor = '#16a34a') {
+  const d = document.createElement('div');
+  d.className = 'fixed bottom-5 right-5 z-70 px-4 py-3 rounded-lg text-white shadow-lg animate-fade-in';
+  d.style.background = bgColor;
+  d.textContent = message;
+  document.body.appendChild(d);
+  setTimeout(() => d.remove(), 3500);
+}
+
+function safeQueryAccountValues() {
+  let accountCard = null;
+  document.querySelectorAll('h3').forEach(h => { if (h.textContent.trim() === 'Account') accountCard = h.closest('div'); });
+  if (!accountCard) return null;
+  const values = accountCard.querySelectorAll('.text-sm');
+  return { card: accountCard, nameEl: values[0], emailEl: values[1] };
+}
+
+const editBtn = document.getElementById('editProfileBtn');
+if (editBtn) {
+  editBtn.addEventListener('click', () => {
+    const info = safeQueryAccountValues();
+    const currentName = info && info.nameEl ? info.nameEl.textContent.trim() : '';
+    const currentEmail = info && info.emailEl ? info.emailEl.textContent.trim() : '';
+    const modal = createModal(`
+      <h3 class="text-lg font-semibold mb-3" style="color:var(--text)">Edit Profile</h3>
+      <div class="space-y-3">
+        <label class="text-xs opacity-75">Name</label>
+        <input id="ep_name" class="w-full px-3 py-2 rounded-lg" value="${currentName}" style="background:var(--bg);color:var(--text);" />
+        <label class="text-xs opacity-75">Email</label>
+        <input id="ep_email" class="w-full px-3 py-2 rounded-lg" value="${currentEmail}" style="background:var(--bg);color:var(--text);" />
+        <div class="flex gap-2 mt-3">
+          <button id="ep_cancel" class="flex-1 px-3 py-2 rounded-lg" style="background:var(--surface);color:var(--secondary)">Cancel</button>
+          <button id="ep_save" class="flex-1 px-3 py-2 rounded-lg text-white" style="background:var(--primary)">Save</button>
+        </div>
+      </div>
+    `);
+
+    modal.querySelector('#ep_cancel').addEventListener('click', () => modal.remove());
+    modal.querySelector('#ep_save').addEventListener('click', () => {
+      const newName = modal.querySelector('#ep_name').value.trim();
+      const newEmail = modal.querySelector('#ep_email').value.trim();
+      const info2 = safeQueryAccountValues();
+      if (info2 && info2.nameEl) info2.nameEl.textContent = newName || '—';
+      if (info2 && info2.emailEl) info2.emailEl.textContent = newEmail || '—';
+      modal.remove();
+      showToast('Profile updated');
+    });
+  });
+}
+
+const manageBtn = document.getElementById('manageBillingBtn');
+if (manageBtn) {
+  manageBtn.addEventListener('click', () => {
+    const paymentMethods = [
+      {id:1, label:'Visa •••• 4242'},
+      {id:2, label:'Mastercard •••• 1287'},
+      {id:3, label:'PayPal john@example.com'}
+    ];
+    const listHtml = paymentMethods.map(p => `<button data-id="${p.id}" class="w-full text-left px-3 py-2 rounded-lg hover:bg-[rgba(108,92,231,0.08)]" style="color:var(--text)">${p.label}</button>`).join('');
+    const modal = createModal(`
+      <h3 class="text-lg font-semibold mb-3" style="color:var(--text)">Manage Payment Methods</h3>
+      <div class="space-y-2">${listHtml}</div>
+      <div class="flex gap-2 mt-4">
+        <button id="pm_add" class="flex-1 px-3 py-2 rounded-lg" style="background:var(--surface);color:var(--secondary)">+ Add Payment Method</button>
+        <button id="pm_close" class="flex-1 px-3 py-2 rounded-lg text-white" style="background:var(--primary)">Close</button>
+      </div>
+    `);
+
+    modal.querySelectorAll('[data-id]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = e.currentTarget.dataset.id;
+        const pm = paymentMethods.find(x => String(x.id) === String(id));
+        if (pm) showToast(pm.label + ' selected');
+      });
+    });
+
+    modal.querySelector('#pm_close').addEventListener('click', () => modal.remove());
+    modal.querySelector('#pm_add').addEventListener('click', () => showToast('Add payment flow not implemented', '#2563eb'));
+  });
+}
+// Element SDK
+const defaultConfig = {
+  page_title: "AI Tools Marketplace",
+  background_color: "#0f1117",
+  surface_color: "#1a1d27",
+  text_color: "#e2e4ea",
+  primary_color: "#6c5ce7",
+  secondary_color: "#a29bfe",
+  font_family: "DM Sans",
+  font_size: 14
+};
+
+function applyConfig(cfg) {
+  const app = document.getElementById('app');
+  app.style.setProperty('--bg', cfg.background_color || defaultConfig.background_color);
+  app.style.setProperty('--surface', cfg.surface_color || defaultConfig.surface_color);
+  app.style.setProperty('--text', cfg.text_color || defaultConfig.text_color);
+  app.style.setProperty('--primary', cfg.primary_color || defaultConfig.primary_color);
+  app.style.setProperty('--secondary', cfg.secondary_color || defaultConfig.secondary_color);
+  document.body.style.background = cfg.background_color || defaultConfig.background_color;
+  document.getElementById('pageTitle').textContent = cfg.page_title || defaultConfig.page_title;
+  const font = cfg.font_family || defaultConfig.font_family;
+  document.body.style.fontFamily = `${font}, sans-serif`;
+  const bs = cfg.font_size || defaultConfig.font_size;
+  document.body.style.fontSize = bs + 'px';
+  // Re-render cards to pick up CSS variable changes
+  render();
+}
+
+// Element SDK initialization removed due to missing external dependencies
+// window.elementSdk.init() - this was causing 404 errors
+
+// Check authentication on page load
+function checkAuth() {
+  const token = localStorage.getItem('auth_token');
+  const user = localStorage.getItem('auth_user');
+  if (!token || !user) {
+    window.location.href = '/signup.html';
+    return false;
+  }
+  return true;
+}
+
+// Logout function
+function logout() {
+  localStorage.removeItem('auth_token');
+  localStorage.removeItem('auth_user');
+  window.location.href = '/signup.html';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Check authentication first
+  if (!checkAuth()) return;
+  
+  // Get user info and update header
+  try {
+    const user = JSON.parse(localStorage.getItem('auth_user'));
+    if (user && user.name) {
+      document.getElementById('pageTitle').textContent = 'Welcome, ' + user.name + '!';
+    }
+  } catch (e) {}
+  
+  setTimeout(() => {
+    loadToolsFromStorage();
+    render();
+    lucide.createIcons();
+  }, 100);
+});
+
+// Settings Page Handlers
+document.getElementById('openSettingsBtn').addEventListener('click', () => {
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('settingsPage').classList.remove('hidden');
+});
+
+document.getElementById('backFromSettingsBtn').addEventListener('click', () => {
+  document.getElementById('settingsPage').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+});
+
+// Logout button handler
+document.getElementById('logoutBtn').addEventListener('click', logout);
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f03241e733fbeb4',t:'MTc3Njg0NTMxMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ </html
