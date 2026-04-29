@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sign in</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+</head>
+<body class="flex items-center justify-center h-screen" style="background:linear-gradient(135deg,#0f1117 0%,#1a1d27 100%)">
+  <div class="w-full max-w-md p-6 rounded-lg" style="background:var(--surface);--surface:#1a1d27;color:#e2e4ea">
+    <h2 class="text-xl font-semibold mb-4">Sign in</h2>
+    <div class="space-y-3">
+      <input id="email" placeholder="Email" class="w-full px-3 py-2 rounded bg-transparent border border-gray-700" />
+      <div class="relative">
+        <input id="password" type="password" placeholder="Password" class="w-full px-3 py-2 rounded bg-transparent border border-gray-700 pr-10" />
+        <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
+          <svg id="togglePasswordBtn" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+        </button>
+      </div>
+      <div class="flex items-center justify-between">
+        <button id="signinBtn" class="px-4 py-2 rounded text-white" style="background:#6c5ce7">Sign in</button>
+        <button id="forgotBtn" class="text-sm text-blue-300 underline ml-2">Forgot password?</button>
+      </div>
+      <p class="text-sm opacity-70">Don't have an account? <a href="signup.html" class="text-blue-400">Sign up</a></p>
+    </div>
+    <div id="msg" class="mt-3 text-sm"></div>
+  </div>
+
+<script>
+function togglePassword() {
+  const input = document.getElementById('password');
+  const btn = document.getElementById('togglePasswordBtn');
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>';
+  } else {
+    input.type = 'password';
+    btn.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>';
+  }
+}
+
+async function postJSON(url, body) {
+  const res = await fetch(url, { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify(body) });
+  return res.json().then(j => ({ ok: res.ok, status: res.status, body: j })).catch(e => ({ ok:false, status:0, body:{error: e.message} }));
+}
+function showMsg(txt, ok=true) {
+  const el = document.getElementById('msg');
+  el.textContent = txt; el.style.color = ok ? '#86efac' : '#fca5a5';
+}
+
+document.getElementById('signinBtn').addEventListener('click', async () => {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  if (!email || !password) return showMsg('Email and password required', false);
+  const r = await postJSON('/api/signin', { email, password });
+  if (!r.ok) return showMsg(r.body && r.body.error ? r.body.error : 'Sign in failed', false);
+  localStorage.setItem('auth_token', r.body.token);
+  localStorage.setItem('auth_user', JSON.stringify(r.body.user));
+  showMsg('Signed in — redirecting', true);
+  setTimeout(() => window.location.href = '/ai tool.html', 800);
+});
+
+// Forgot password flow: show modal to enter email
+document.getElementById('forgotBtn').addEventListener('click', () => {
+  const overlay = document.createElement('div');
+  overlay.style.position = 'fixed'; overlay.style.inset = 0; overlay.style.background = 'rgba(0,0,0,0.6)'; overlay.style.display = 'flex'; overlay.style.alignItems = 'center'; overlay.style.justifyContent = 'center'; overlay.style.zIndex = 9999;
+  const box = document.createElement('div');
+  box.style.background = '#1a1d27'; box.style.padding = '20px'; box.style.borderRadius = '10px'; box.style.width = '360px';
+  box.innerHTML = `<h3 style="color:#e2e4ea;margin-bottom:8px">Reset password</h3><input id="fp_email" placeholder="Your email" style="width:100%;padding:8px;border-radius:6px;margin-bottom:8px;background:transparent;border:1px solid rgba(255,255,255,0.06);color:#e2e4ea" /><div style="display:flex;gap:8px"><button id="fp_send" style="flex:1;background:#6c5ce7;color:#fff;padding:8px;border-radius:6px">Send</button><button id="fp_cancel" style="flex:1;background:transparent;border-radius:6px;border:1px solid rgba(255,255,255,0.06);color:#e2e4ea">Cancel</button></div><div id="fp_msg" style="margin-top:8px;color:#86efac"></div>`;
+  overlay.appendChild(box); document.body.appendChild(overlay);
+  overlay.querySelector('#fp_cancel').addEventListener('click', () => overlay.remove());
+  overlay.querySelector('#fp_send').addEventListener('click', async () => {
+    const email = overlay.querySelector('#fp_email').value.trim();
+    const msg = overlay.querySelector('#fp_msg');
+    if (!email) { msg.style.color = '#fca5a5'; msg.textContent = 'Enter your email'; return; }
+    try {
+      const res = await fetch('/api/forgot-password', { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify({ email }) });
+      const j = await res.json();
+      msg.style.color = res.ok ? '#86efac' : '#fca5a5';
+      msg.textContent = (j && j.message) ? j.message : 'If account exists, reset sent.';
+      // show token for development testing if present
+      if (j && j.resetToken) {
+        const t = document.createElement('div'); t.style.marginTop = '8px'; t.style.color = '#bfdbfe'; t.textContent = 'Dev reset token: ' + j.resetToken; box.appendChild(t);
+      }
+    } catch (e) {
+      msg.style.color = '#fca5a5'; msg.textContent = 'Error sending request';
+    }
+  });
+});
+</script>
+</body>
+</html>
