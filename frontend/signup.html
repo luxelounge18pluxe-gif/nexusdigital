@@ -72,13 +72,13 @@ document.getElementById('signupBtn').addEventListener('click', async () => {
   if (!email || !password) return showMsg('Email and password required', false);
   if (password !== confirmPassword) return showMsg('Passwords do not match', false);
   if (password.length < 6) return showMsg('Password must be at least 6 characters', false);
-  const r = await postJSON('/api/signup', { name, email, password });
+  const r = await postJSON('https://nexusbackend-vpu0.onrender.com/api/signup', { name, email, password });
   if (!r.ok) return showMsg(r.body && r.body.error ? r.body.error : 'Sign up failed', false);
   // store token locally
   localStorage.setItem('auth_token', r.body.token);
   localStorage.setItem('auth_user', JSON.stringify(r.body.user));
   showMsg('Account created — redirected', true);
-  setTimeout(() => window.location.href = '/signin.html', 900);
+  setTimeout(() => window.location.href = 'signin.html', 900);
 });
 
 // Simulated Google sign-in (placeholder)
@@ -89,7 +89,7 @@ if (googleBtn) {
     const dummyUser = { id: 'g_' + Date.now(), name: 'Google User', email: 'user@gmail.com' };
     localStorage.setItem('auth_token', 'google_dummy_token_' + Date.now());
     localStorage.setItem('auth_user', JSON.stringify(dummyUser));
-    setTimeout(() => { window.location.href = '/ai tool.html'; }, 800);
+    setTimeout(() => { window.location.href = 'ai tool.html'; }, 800);
   });
 }
 </script>
