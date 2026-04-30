@@ -52,7 +52,7 @@ document.getElementById('signinBtn').addEventListener('click', async () => {
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
   if (!email || !password) return showMsg('Email and password required', false);
-  const r = await postJSON('/api/signin', { email, password });
+  const r = await postJSON('https://nexusbackend-vpu0.onrender.com/api/signin', { email, password });
   if (!r.ok) return showMsg(r.body && r.body.error ? r.body.error : 'Sign in failed', false);
   localStorage.setItem('auth_token', r.body.token);
   localStorage.setItem('auth_user', JSON.stringify(r.body.user));
@@ -74,7 +74,7 @@ document.getElementById('forgotBtn').addEventListener('click', () => {
     const msg = overlay.querySelector('#fp_msg');
     if (!email) { msg.style.color = '#fca5a5'; msg.textContent = 'Enter your email'; return; }
     try {
-      const res = await fetch('/api/forgot-password', { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify({ email }) });
+      const res = await fetch('https://nexusbackend-vpu0.onrender.com/api/forgot-password', { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify({ email }) });
       const j = await res.json();
       msg.style.color = res.ok ? '#86efac' : '#fca5a5';
       msg.textContent = (j && j.message) ? j.message : 'If account exists, reset sent.';
