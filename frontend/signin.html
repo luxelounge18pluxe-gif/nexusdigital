@@ -57,7 +57,7 @@ document.getElementById('signinBtn').addEventListener('click', async () => {
   localStorage.setItem('auth_token', r.body.token);
   localStorage.setItem('auth_user', JSON.stringify(r.body.user));
   showMsg('Signed in — redirecting', true);
-  setTimeout(() => window.location.href = '/ai tool.html', 800);
+  setTimeout(() => window.location.href = 'ai tool.html', 800);
 });
 
 // Forgot password flow: show modal to enter email
