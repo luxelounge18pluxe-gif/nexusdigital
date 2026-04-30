@@ -8,6 +8,27 @@
 </head>
 <body class="flex items-center justify-center h-screen" style="background:linear-gradient(135deg,#0f1117 0%,#1a1d27 100%)">
   <div class="w-full max-w-md p-6 rounded-lg" style="background:var(--surface);--surface:#1a1d27;color:#e2e4ea">
+    <div class="mb-6 flex justify-center">
+      <svg width="200" height="60" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#00c6ff;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#0072ff;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <rect width="400" height="120" fill="black" rx="15"/>
+        <circle cx="60" cy="60" r="20" fill="none" stroke="url(#grad1)" stroke-width="3"/>
+        <circle cx="100" cy="30" r="6" fill="url(#grad1)"/>
+        <circle cx="100" cy="90" r="6" fill="url(#grad1)"/>
+        <circle cx="30" cy="30" r="6" fill="url(#grad1)"/>
+        <circle cx="30" cy="90" r="6" fill="url(#grad1)"/>
+        <line x1="60" y1="60" x2="100" y2="30" stroke="url(#grad1)" stroke-width="2"/>
+        <line x1="60" y1="60" x2="100" y2="90" stroke="url(#grad1)" stroke-width="2"/>
+        <line x1="60" y1="60" x2="30" y2="30" stroke="url(#grad1)" stroke-width="2"/>
+        <line x1="60" y1="60" x2="30" y2="90" stroke="url(#grad1)" stroke-width="2"/>
+        <text x="140" y="75" font-family="Arial, Helvetica, sans-serif" font-size="40" fill="white" letter-spacing="4">NEXUS</text>
+      </svg>
+    </div>
     <h2 class="text-xl font-semibold mb-4">Create account</h2>
     <div class="space-y-3">
       <input id="name" placeholder="Full name" class="w-full px-3 py-2 rounded bg-transparent border border-gray-700" />
