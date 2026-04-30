@@ -324,6 +324,21 @@ function loadToolsFromStorage() {
   }
 }
 
+async function loadToolsFromAPI() {
+  try {
+    const response = await fetch('https://nexusbackend-vpu0.onrender.com/api/tools');
+    if (response.ok) {
+      const apiTools = await response.json();
+      tools.length = 0;
+      tools.push(...apiTools);
+      localStorage.setItem('aiToolsData', JSON.stringify(apiTools));
+      render();
+    }
+  } catch (error) {
+    console.error('Failed to load tools from API:', error);
+  }
+}
+
 let activeCat = "All";
 
 function createCard(t) {
@@ -388,34 +403,62 @@ function showPaymentModal(tool) {
     overlay.querySelector('#confirmPayBtn').textContent = 'Processing...';
     overlay.querySelector('#confirmPayBtn').disabled = true;
     
-    // Simulate payment processing
-    await new Promise(r => setTimeout(r, 1500));
-    
-    // Get user info
-    let userEmail = 'Unknown';
     try {
-      const user = JSON.parse(localStorage.getItem('auth_user'));
-      if (user && user.email) userEmail = user.email;
-    } catch(e) {}
-    
-    // Add to SMS log
-    const logMessage = `Payment successful! You have purchased ${tool.name} for ${tool.price}. Login credentials will be sent to your registered email.`;
-    addSmsLog('System', logMessage);
-    
-    // Show success
-    box.innerHTML = `
-      <div class="text-center py-4">
-        <div class="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style="background:rgba(134,239,172,0.2)">
-          <svg class="w-8 h-8" fill="none" stroke="#86efac" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+      const token = localStorage.getItem('auth_token');
+      if (!token) {
+        alert('Not authenticated');
+        overlay.remove();
+        return;
+      }
+      
+      // Parse amount
+      const amount = parseFloat(tool.price.replace('$', '').replace('/yr', ''));
+      
+      const response = await fetch('https://nexusbackend-vpu0.onrender.com/api/transactions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          toolId: tool.id,
+          amount: amount,
+          quantity: 1
+        })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        alert('Payment failed: ' + (error.error || 'Unknown error'));
+        overlay.remove();
+        return;
+      }
+      
+      const transaction = await response.json();
+      
+      // Add to SMS log
+      const logMessage = `Payment successful! You have purchased ${tool.name} for ${tool.price}. Transaction ID: ${transaction.id}`;
+      addSmsLog('System', logMessage);
+      
+      // Show success
+      box.innerHTML = `
+        <div class="text-center py-4">
+          <div class="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style="background:rgba(134,239,172,0.2)">
+            <svg class="w-8 h-8" fill="none" stroke="#86efac" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <h3 class="text-lg font-semibold mb-2" style="color:var(--text)">Payment Successful!</h3>
+          <p class="text-sm mb-2" style="color:var(--secondary)">${tool.name} - ${tool.price}</p>
+          <p class="text-xs" style="color:var(--secondary)">Transaction recorded</p>
         </div>
-        <h3 class="text-lg font-semibold mb-2" style="color:var(--text)">Payment Successful!</h3>
-        <p class="text-sm mb-2" style="color:var(--secondary)">${tool.name} - ${tool.price}</p>
-        <p class="text-xs" style="color:var(--secondary)">Logins will be sent to your email</p>
-      </div>
-    `;
-    
-    // Auto close after 2 seconds
-    setTimeout(() => overlay.remove(), 2500);
+      `;
+      
+      // Auto close after 2 seconds
+      setTimeout(() => overlay.remove(), 2500);
+    } catch (error) {
+      console.error('Payment error:', error);
+      alert('Payment failed: Network error');
+      overlay.remove();
+    }
   });
   
   // Close on overlay click
@@ -770,7 +813,7 @@ document.addEventListener('DOMContentLoaded', () => {
   } catch (e) {}
   
   setTimeout(() => {
-    loadToolsFromStorage();
+    loadToolsFromAPI();
     render();
     lucide.createIcons();
   }, 100);
