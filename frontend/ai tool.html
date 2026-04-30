@@ -31,6 +31,7 @@ html, body { height: 100%; margin: 0; }
      <div class="px-3 py-1.5 rounded-xl text-sm font-semibold" style="background:var(--surface);color:var(--primary)">
       $0.00
      </div><button class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:var(--surface)"><i data-lucide="user" class="w-4 h-4" style="color:var(--secondary)"></i></button>
+     <button id="refreshToolsBtn" class="px-3 py-1.5 rounded-xl text-sm font-semibold" style="background:var(--surface);color:var(--primary)">Refresh</button>
      <button id="logoutBtn" class="px-3 py-1.5 rounded-xl text-sm font-semibold" style="background:var(--surface);color:var(--primary)">Logout</button>
     </div>
    </header><!-- Categories -->
@@ -816,7 +817,12 @@ document.addEventListener('DOMContentLoaded', () => {
     loadToolsFromAPI();
     render();
     lucide.createIcons();
+    setInterval(loadToolsFromAPI, 30000);
   }, 100);
+
+  document.getElementById('refreshToolsBtn').addEventListener('click', () => {
+    loadToolsFromAPI();
+  });
 });
 
 // Settings Page Handlers
