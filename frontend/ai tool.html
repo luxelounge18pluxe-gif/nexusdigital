@@ -31,7 +31,6 @@ html, body { height: 100%; margin: 0; }
      <div class="px-3 py-1.5 rounded-xl text-sm font-semibold" style="background:var(--surface);color:var(--primary)">
       $0.00
      </div><button class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:var(--surface)"><i data-lucide="user" class="w-4 h-4" style="color:var(--secondary)"></i></button>
-     <button id="refreshToolsBtn" class="px-3 py-1.5 rounded-xl text-sm font-semibold" style="background:var(--surface);color:var(--primary)">Refresh</button>
      <button id="logoutBtn" class="px-3 py-1.5 rounded-xl text-sm font-semibold" style="background:var(--surface);color:var(--primary)">Logout</button>
     </div>
    </header><!-- Categories -->
@@ -646,17 +645,6 @@ function showCountryModal() {
   });
 }
 
-// Settings Page Handlers
-document.getElementById('openSettingsBtn').addEventListener('click', () => {
-  document.getElementById('app').classList.add('hidden');
-  document.getElementById('settingsPage').classList.remove('hidden');
-});
-
-document.getElementById('backFromSettingsBtn').addEventListener('click', () => {
-  document.getElementById('settingsPage').classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
-});
-
 // Edit Profile and Manage Billing handlers
 function createModal(innerHTML) {
   const overlay = document.createElement('div');
@@ -819,16 +807,34 @@ document.addEventListener('DOMContentLoaded', () => {
     lucide.createIcons();
     setInterval(loadToolsFromAPI, 30000);
   }, 100);
-
-  document.getElementById('refreshToolsBtn').addEventListener('click', () => {
-    loadToolsFromAPI();
-  });
 });
 
 // Settings Page Handlers
+function populateSettingsPage() {
+  try {
+    const user = JSON.parse(localStorage.getItem('auth_user'));
+    if (user) {
+      // Update Account section - find and update the text content
+      const accountCards = document.querySelectorAll('#settingsPage [style*="--surface"]');
+      accountCards.forEach(card => {
+        const heading = card.querySelector('h3');
+        if (heading && heading.textContent === 'Account') {
+          const fields = card.querySelectorAll('.space-y-3 > div p:not([style*="opacity"])');
+          if (fields[0]) fields[0].textContent = user.name || 'User';
+          if (fields[1]) fields[1].textContent = user.email || 'N/A';
+        }
+      });
+    }
+  } catch (e) {
+    console.error('Error populating settings:', e);
+  }
+}
+
 document.getElementById('openSettingsBtn').addEventListener('click', () => {
   document.getElementById('app').classList.add('hidden');
   document.getElementById('settingsPage').classList.remove('hidden');
+  populateSettingsPage();
+  lucide.createIcons();
 });
 
 document.getElementById('backFromSettingsBtn').addEventListener('click', () => {
