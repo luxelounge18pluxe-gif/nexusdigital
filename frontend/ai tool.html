@@ -67,8 +67,27 @@ html, body { height: 100%; margin: 0; }
       <button id="backFromSettingsBtn" class="px-4 py-2 rounded-lg text-sm font-medium" style="background:var(--surface);color:var(--secondary)">Back</button>
     </header>
     
-    <div class="flex-1 overflow-y-auto hide-scrollbar px-8 py-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
+    <div class="flex-1 flex overflow-hidden">
+      <!-- Settings Sidebar -->
+      <div class="w-48 border-r border-opacity-10 overflow-y-auto hide-scrollbar p-4" style="border-color:var(--secondary);background:rgba(26,29,39,0.5)">
+        <div class="space-y-2">
+          <button class="settings-menu-btn w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-all active" data-section="overview" style="background:var(--primary);color:white">Overview</button>
+          <button class="settings-menu-btn w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-all" data-section="account" style="color:var(--secondary)">Account</button>
+          <button class="settings-menu-btn w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-all" data-section="wallet" style="color:var(--secondary)">Wallet & Payment</button>
+          <button class="settings-menu-btn w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-all" data-section="app-preference" style="color:var(--secondary)">App Preference</button>
+          <button class="settings-menu-btn w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-all" data-section="ai-preferences" style="color:var(--secondary)">AI Preferences</button>
+          <button class="settings-menu-btn w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-all" data-section="integrations" style="color:var(--secondary)">Integrations</button>
+          <button class="settings-menu-btn w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-all" data-section="support" style="color:var(--secondary)">Support</button>
+          <button class="settings-menu-btn w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-all" data-section="legal" style="color:var(--secondary)">About / Legal</button>
+        </div>
+      </div>
+      
+      <!-- Settings Content -->
+      <div class="flex-1 overflow-y-auto hide-scrollbar px-8 py-8">
+        <!-- Overview Section (default) -->
+        <div id="settings-overview" class="settings-content-section max-w-4xl">
+          <h2 style="color:var(--text)" class="text-2xl font-semibold mb-6">Settings Overview</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         
         <!-- Account Card -->
         <div style="background:var(--surface)" class="p-5 rounded-lg border border-opacity-10" style="border-color:var(--secondary)">
@@ -131,73 +150,40 @@ html, body { height: 100%; margin: 0; }
             </div>
             <button style="background:var(--primary);color:white" class="w-full mt-2 px-3 py-1.5 rounded text-xs font-medium transition-all hover:opacity-90">Details</button>
           </div>
+          </div>
         </div>
 
-      </div>
-    </div>
-  </div>
+        <!-- Account Section -->
+        <div id="settings-account" class="settings-content-section max-w-4xl hidden">
+          <h2 style="color:var(--text)" class="text-2xl font-semibold mb-6">Account Settings</h2>
+          <div style="background:var(--surface)" class="p-5 rounded-lg border border-opacity-10 mb-4" style="border-color:var(--secondary)">
+            <h3 style="color:var(--text)" class="text-lg font-semibold mb-4">Account Information</h3>
+            <div class="space-y-3">
+              <div>
+                <p style="color:var(--secondary)" class="text-xs opacity-75">Username</p>
+                <p style="color:var(--text)" class="text-sm">John Doe</p>
+              </div>
+              <div>
+                <p style="color:var(--secondary)" class="text-xs opacity-75">Email</p>
+                <p style="color:var(--text)" class="text-sm">john@example.com</p>
+              </div>
+              <button id="editProfileBtn" style="background:var(--primary);color:white" class="w-full mt-4 px-3 py-1.5 rounded text-xs font-medium transition-all hover:opacity-90">Edit Profile</button>
+            </div>
+          </div>
+        </div>
 
         <!-- Wallet & Payment Section -->
-        <div id="wallet-section" class="settings-section space-y-6 hidden">
-          <h2 style="color:var(--text)" class="text-xl font-semibold mb-4">Wallet & Payment</h2>
+        <div id="settings-wallet" class="settings-content-section max-w-4xl hidden">
+          <h2 style="color:var(--text)" class="text-2xl font-semibold mb-6">Wallet & Payment</h2>
           <div class="space-y-4">
             <div style="background:var(--surface)" class="p-4 rounded-lg">
               <label style="color:var(--text)" class="block text-sm font-medium mb-2">Wallet Balance</label>
-              <p style="color:var(--text)" class="text-2xl font-bold">$0.00</p>
+              <p style="color:var(--text)" class="text-2xl font-bold">$1,250.00</p>
             </div>
             <div style="background:var(--surface)" class="p-4 rounded-lg">
               <label style="color:var(--text)" class="block text-sm font-medium mb-2">Payment Methods</label>
               <button style="background:var(--primary);color:white" class="px-4 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-90">+ Add Payment Method</button>
             </div>
-          </div>
-        </div>
-
-        <!-- Notification Section -->
-        <div id="notification-section" class="settings-section space-y-6 hidden">
-          <h2 style="color:var(--text)" class="text-xl font-semibold mb-4">Notification Settings</h2>
-          <div class="space-y-4">
-            <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
-              <label style="color:var(--text)" class="text-sm font-medium">Email Notifications</label>
-              <input type="checkbox" class="rounded" style="accent-color:var(--primary)">
-            </div>
-            <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
-              <label style="color:var(--text)" class="text-sm font-medium">Push Notifications</label>
-              <input type="checkbox" class="rounded" style="accent-color:var(--primary)" checked>
-            </div>
-            <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
-              <label style="color:var(--text)" class="text-sm font-medium">SMS Notifications</label>
-              <input type="checkbox" class="rounded" style="accent-color:var(--primary)">
-            </div>
-          </div>
-        </div>
-
-        <!-- Appearance Section -->
-        <div id="appearance-section" class="settings-section space-y-6 hidden">
-          <h2 style="color:var(--text)" class="text-xl font-semibold mb-4">Appearance Settings</h2>
-          <div class="space-y-4">
-            <div style="background:var(--surface)" class="p-4 rounded-lg">
-              <label style="color:var(--text)" class="block text-sm font-medium mb-2">Theme</label>
-              <select class="w-full px-3 py-2 rounded-lg text-sm" style="background:var(--bg);color:var(--text);">
-                <option value="dark">Dark</option>
-                <option value="light">Light</option>
-                <option value="auto">Auto</option>
-              </select>
-            </div>
-            <div style="background:var(--surface)" class="p-4 rounded-lg">
-              <label style="color:var(--text)" class="block text-sm font-medium mb-2">Font Size</label>
-              <select class="w-full px-3 py-2 rounded-lg text-sm" style="background:var(--bg);color:var(--text);">
-                <option value="small">Small</option>
-                <option value="normal">Normal</option>
-                <option value="large">Large</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Billing & Subscription Section -->
-        <div id="billing-section" class="settings-section space-y-6 hidden">
-          <h2 style="color:var(--text)" class="text-xl font-semibold mb-4">Billing & Subscription</h2>
-          <div class="space-y-4">
             <div style="background:var(--surface)" class="p-4 rounded-lg">
               <label style="color:var(--text)" class="block text-sm font-medium mb-2">Current Plan</label>
               <p style="color:var(--secondary)" class="text-lg font-semibold">Premium</p>
@@ -206,13 +192,13 @@ html, body { height: 100%; margin: 0; }
               <label style="color:var(--text)" class="block text-sm font-medium mb-2">Renewal Date</label>
               <p style="color:var(--text)">April 30, 2026</p>
             </div>
-            <button style="background:var(--primary);color:white" class="px-4 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-90">Manage Subscription</button>
+            <button id="manageBillingBtn" style="background:var(--primary);color:white" class="w-full px-4 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-90">Manage Subscription</button>
           </div>
         </div>
 
         <!-- App Preference Section -->
-        <div id="app-preference-section" class="settings-section space-y-6 hidden">
-          <h2 style="color:var(--text)" class="text-xl font-semibold mb-4">App Preference</h2>
+        <div id="settings-app-preference" class="settings-content-section max-w-4xl hidden">
+          <h2 style="color:var(--text)" class="text-2xl font-semibold mb-6">App Preference</h2>
           <div class="space-y-4">
             <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
               <label style="color:var(--text)" class="text-sm font-medium">Auto-Update</label>
@@ -230,8 +216,8 @@ html, body { height: 100%; margin: 0; }
         </div>
 
         <!-- AI Preferences Section -->
-        <div id="ai-preferences-section" class="settings-section space-y-6 hidden">
-          <h2 style="color:var(--text)" class="text-xl font-semibold mb-4">AI Preferences</h2>
+        <div id="settings-ai-preferences" class="settings-content-section max-w-4xl hidden">
+          <h2 style="color:var(--text)" class="text-2xl font-semibold mb-6">AI Preferences</h2>
           <div class="space-y-4">
             <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
               <label style="color:var(--text)" class="text-sm font-medium">AI Recommendations</label>
@@ -253,8 +239,8 @@ html, body { height: 100%; margin: 0; }
         </div>
 
         <!-- Integrations Section -->
-        <div id="integrations-section" class="settings-section space-y-6 hidden">
-          <h2 style="color:var(--text)" class="text-xl font-semibold mb-4">Integrations</h2>
+        <div id="settings-integrations" class="settings-content-section max-w-4xl hidden">
+          <h2 style="color:var(--text)" class="text-2xl font-semibold mb-6">Integrations</h2>
           <div class="space-y-4">
             <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
               <div>
@@ -281,8 +267,8 @@ html, body { height: 100%; margin: 0; }
         </div>
 
         <!-- Support Section -->
-        <div id="support-section" class="settings-section space-y-6 hidden">
-          <h2 style="color:var(--text)" class="text-xl font-semibold mb-4">Support</h2>
+        <div id="settings-support" class="settings-content-section max-w-4xl hidden">
+          <h2 style="color:var(--text)" class="text-2xl font-semibold mb-6">Support</h2>
           <div class="space-y-4">
             <button style="background:var(--surface);color:var(--secondary)" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80">Documentation</button>
             <button style="background:var(--surface);color:var(--secondary)" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80">Contact Support</button>
@@ -292,8 +278,8 @@ html, body { height: 100%; margin: 0; }
         </div>
 
         <!-- About / Legal Section -->
-        <div id="legal-section" class="settings-section space-y-6 hidden">
-          <h2 style="color:var(--text)" class="text-xl font-semibold mb-4">About / Legal</h2>
+        <div id="settings-legal" class="settings-content-section max-w-4xl hidden">
+          <h2 style="color:var(--text)" class="text-2xl font-semibold mb-6">About / Legal</h2>
           <div class="space-y-4">
             <div style="background:var(--surface)" class="p-4 rounded-lg">
               <label style="color:var(--text)" class="block text-sm font-medium mb-2">App Version</label>
@@ -840,6 +826,34 @@ document.getElementById('openSettingsBtn').addEventListener('click', () => {
 document.getElementById('backFromSettingsBtn').addEventListener('click', () => {
   document.getElementById('settingsPage').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
+});
+
+// Settings menu navigation
+document.querySelectorAll('.settings-menu-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const section = btn.dataset.section;
+    
+    // Update active button style
+    document.querySelectorAll('.settings-menu-btn').forEach(b => {
+      b.classList.remove('active');
+      b.style.background = 'transparent';
+      b.style.color = 'var(--secondary)';
+    });
+    btn.classList.add('active');
+    btn.style.background = 'var(--primary)';
+    btn.style.color = 'white';
+    
+    // Hide all sections
+    document.querySelectorAll('.settings-content-section').forEach(sec => {
+      sec.classList.add('hidden');
+    });
+    
+    // Show selected section
+    const selectedSection = document.getElementById('settings-' + section);
+    if (selectedSection) {
+      selectedSection.classList.remove('hidden');
+    }
+  });
 });
 
 // Logout button handler
