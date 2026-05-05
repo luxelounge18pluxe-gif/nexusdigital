@@ -25,13 +25,13 @@ html, body { height: 100%; margin: 0; }
   <div id="app" class="w-full h-full flex flex-col" style="--bg:#0f1117;--surface:#1a1d27;--text:#e2e4ea;--primary:#6c5ce7;--secondary:#a29bfe;"><!-- Header -->
    <header class="px-5 pt-5 pb-3 flex items-center justify-between flex-shrink-0">
     <div class="flex items-center gap-3">
-     <h1 id="pageTitle" class="text-lg font-bold" style="color:var(--text)">Welcome back!</h1>
+     <button id="profileBtn" class="w-9 h-9 rounded-xl flex items-center justify-center hover:opacity-80 transition-all" style="background:var(--surface)"><i data-lucide="user" class="w-4 h-4" style="color:var(--secondary)"></i></button>
+     <h1 id="pageTitle" class="text-lg font-bold" style="color:var(--text)">Welcome back</h1>
     </div>
     <div class="flex items-center gap-3">
      <div class="px-3 py-1.5 rounded-xl text-sm font-semibold" style="background:var(--surface);color:var(--primary)">
       $0.00
-     </div><button class="w-9 h-9 rounded-xl flex items-center justify-center" style="background:var(--surface)"><i data-lucide="user" class="w-4 h-4" style="color:var(--secondary)"></i></button>
-     <button id="logoutBtn" class="px-3 py-1.5 rounded-xl text-sm font-semibold" style="background:var(--surface);color:var(--primary)">Logout</button>
+     </div><button id="settingsBtn" class="w-9 h-9 rounded-xl flex items-center justify-center hover:opacity-80 transition-all" style="background:var(--surface)"><i data-lucide="settings" class="w-4 h-4" style="color:var(--secondary)"></i></button><button id="logoutBtn" class="px-3 py-1.5 rounded-xl text-sm font-semibold" style="background:var(--surface);color:var(--primary)">Logout</button>
     </div>
    </header><!-- Categories -->
    <div class="px-5 pb-3 flex-shrink-0">
@@ -56,251 +56,11 @@ html, body { height: 100%; margin: 0; }
       </div>
     </div>
    </div>
-   <div class="px-5 pb-3 flex-shrink-0">
-    <button id="openSettingsBtn" class="px-4 py-2 rounded-lg text-sm font-medium text-white transition-all hover:opacity-90" style="background:var(--primary)">Settings</button>
-  </div>
 
-  <!-- Settings Page -->
-  <div id="settingsPage" class="hidden w-full h-full flex flex-col" style="background: linear-gradient(135deg, #0f1117 0%, #1a1d27 50%, #0a0e18 100%);">
-    <header class="px-5 pt-5 pb-3 flex items-center justify-between flex-shrink-0 border-b border-opacity-10" style="border-color:var(--secondary)">
-      <h1 id="pageTitle" class="text-lg font-bold" style="color:var(--text)">Settings</h1>
-      <button id="backFromSettingsBtn" class="px-4 py-2 rounded-lg text-sm font-medium" style="background:var(--surface);color:var(--secondary)">Back</button>
-    </header>
-    
-    <div class="flex-1 flex overflow-hidden">
-      <!-- Settings Sidebar -->
-      <div class="w-48 border-r border-opacity-10 overflow-y-auto hide-scrollbar p-4" style="border-color:var(--secondary);background:rgba(26,29,39,0.5)">
-        <div class="space-y-2">
-          <button class="settings-menu-btn w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-all active" data-section="overview" style="background:var(--primary);color:white">Overview</button>
-          <button class="settings-menu-btn w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-all" data-section="account" style="color:var(--secondary)">Account</button>
-          <button class="settings-menu-btn w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-all" data-section="wallet" style="color:var(--secondary)">Wallet & Payment</button>
-          <button class="settings-menu-btn w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-all" data-section="app-preference" style="color:var(--secondary)">App Preference</button>
-          <button class="settings-menu-btn w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-all" data-section="ai-preferences" style="color:var(--secondary)">AI Preferences</button>
-          <button class="settings-menu-btn w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-all" data-section="integrations" style="color:var(--secondary)">Integrations</button>
-          <button class="settings-menu-btn w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-all" data-section="support" style="color:var(--secondary)">Support</button>
-          <button class="settings-menu-btn w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-all" data-section="legal" style="color:var(--secondary)">About / Legal</button>
-        </div>
-      </div>
-      
-      <!-- Settings Content -->
-      <div class="flex-1 overflow-y-auto hide-scrollbar px-8 py-8">
-        <!-- Overview Section (default) -->
-        <div id="settings-overview" class="settings-content-section max-w-4xl">
-          <h2 style="color:var(--text)" class="text-2xl font-semibold mb-6">Settings Overview</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        
-        <!-- Account Card -->
-        <div style="background:var(--surface)" class="p-5 rounded-lg border border-opacity-10" style="border-color:var(--secondary)">
-          <h3 style="color:var(--text)" class="text-lg font-semibold mb-4">Account</h3>
-          <div class="space-y-3">
-            <div>
-              <p style="color:var(--secondary)" class="text-xs opacity-75">Username</p>
-              <p style="color:var(--text)" class="text-sm">John Doe</p>
-            </div>
-            <div>
-              <p style="color:var(--secondary)" class="text-xs opacity-75">Email</p>
-              <p style="color:var(--text)" class="text-sm">john@example.com</p>
-            </div>
-            <button id="editProfileBtn" style="background:var(--primary);color:white" class="w-full mt-2 px-3 py-1.5 rounded text-xs font-medium transition-all hover:opacity-90">Edit Profile</button>
-          </div>
-        </div>
 
-        <!-- Wallet & Billing Card -->
-        <div style="background:var(--surface)" class="p-5 rounded-lg border border-opacity-10" style="border-color:var(--secondary)">
-          <h3 style="color:var(--text)" class="text-lg font-semibold mb-4">Wallet & Billing</h3>
-          <div class="space-y-3">
-            <div>
-              <p style="color:var(--secondary)" class="text-xs opacity-75">Balance</p>
-              <p style="color:var(--text)" class="text-lg font-bold">$1,250.00</p>
-            </div>
-            <button id="manageBillingBtn" style="background:var(--primary);color:white" class="w-full mt-2 px-3 py-1.5 rounded text-xs font-medium transition-all hover:opacity-90">Manage</button>
-          </div>
-        </div>
-
-        <!-- Notifications Card -->
-        <div style="background:var(--surface)" class="p-5 rounded-lg border border-opacity-10" style="border-color:var(--secondary)">
-          <h3 style="color:var(--text)" class="text-lg font-semibold mb-4">Notifications</h3>
-          <div class="space-y-3">
-            <div class="flex items-center justify-between">
-              <p style="color:var(--secondary)" class="text-xs opacity-75">Email</p>
-              <input type="checkbox" class="rounded" style="accent-color:var(--primary)">
-            </div>
-            <div class="flex items-center justify-between">
-              <p style="color:var(--secondary)" class="text-xs opacity-75">Push</p>
-              <input type="checkbox" class="rounded" style="accent-color:var(--primary)" checked>
-            </div>
-            <div class="flex items-center justify-between">
-              <p style="color:var(--secondary)" class="text-xs opacity-75">SMS</p>
-              <input type="checkbox" class="rounded" style="accent-color:var(--primary)">
-            </div>
-          </div>
-        </div>
-
-        <!-- About / Legal Card -->
-        <div style="background:var(--surface)" class="p-5 rounded-lg border border-opacity-10" style="border-color:var(--secondary)">
-          <h3 style="color:var(--text)" class="text-lg font-semibold mb-4">About</h3>
-          <div class="space-y-3">
-            <div>
-              <p style="color:var(--secondary)" class="text-xs opacity-75">Version</p>
-              <p style="color:var(--text)" class="text-sm">v2.1.0</p>
-            </div>
-            <div>
-              <p style="color:var(--secondary)" class="text-xs opacity-75">Last Updated</p>
-              <p style="color:var(--text)" class="text-sm">April 22, 2026</p>
-            </div>
-            <button style="background:var(--primary);color:white" class="w-full mt-2 px-3 py-1.5 rounded text-xs font-medium transition-all hover:opacity-90">Details</button>
-          </div>
-          </div>
-        </div>
-        </div>
-
-        <!-- Account Section -->
-        <div id="settings-account" class="settings-content-section max-w-4xl hidden">
-          <h2 style="color:var(--text)" class="text-2xl font-semibold mb-6">Account Settings</h2>
-          <div style="background:var(--surface)" class="p-5 rounded-lg border border-opacity-10 mb-4" style="border-color:var(--secondary)">
-            <h3 style="color:var(--text)" class="text-lg font-semibold mb-4">Account Information</h3>
-            <div class="space-y-3">
-              <div>
-                <p style="color:var(--secondary)" class="text-xs opacity-75">Username</p>
-                <p style="color:var(--text)" class="text-sm">John Doe</p>
-              </div>
-              <div>
-                <p style="color:var(--secondary)" class="text-xs opacity-75">Email</p>
-                <p style="color:var(--text)" class="text-sm">john@example.com</p>
-              </div>
-              <button id="editProfileBtn" style="background:var(--primary);color:white" class="w-full mt-4 px-3 py-1.5 rounded text-xs font-medium transition-all hover:opacity-90">Edit Profile</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Wallet & Payment Section -->
-        <div id="settings-wallet" class="settings-content-section max-w-4xl hidden">
-          <h2 style="color:var(--text)" class="text-2xl font-semibold mb-6">Wallet & Payment</h2>
-          <div class="space-y-4">
-            <div style="background:var(--surface)" class="p-4 rounded-lg">
-              <label style="color:var(--text)" class="block text-sm font-medium mb-2">Wallet Balance</label>
-              <p style="color:var(--text)" class="text-2xl font-bold">$1,250.00</p>
-            </div>
-            <div style="background:var(--surface)" class="p-4 rounded-lg">
-              <label style="color:var(--text)" class="block text-sm font-medium mb-2">Payment Methods</label>
-              <button style="background:var(--primary);color:white" class="px-4 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-90">+ Add Payment Method</button>
-            </div>
-            <div style="background:var(--surface)" class="p-4 rounded-lg">
-              <label style="color:var(--text)" class="block text-sm font-medium mb-2">Current Plan</label>
-              <p style="color:var(--secondary)" class="text-lg font-semibold">Premium</p>
-            </div>
-            <div style="background:var(--surface)" class="p-4 rounded-lg">
-              <label style="color:var(--text)" class="block text-sm font-medium mb-2">Renewal Date</label>
-              <p style="color:var(--text)">April 30, 2026</p>
-            </div>
-            <button id="manageBillingBtn" style="background:var(--primary);color:white" class="w-full px-4 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-90">Manage Subscription</button>
-          </div>
-        </div>
-
-        <!-- App Preference Section -->
-        <div id="settings-app-preference" class="settings-content-section max-w-4xl hidden">
-          <h2 style="color:var(--text)" class="text-2xl font-semibold mb-6">App Preference</h2>
-          <div class="space-y-4">
-            <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
-              <label style="color:var(--text)" class="text-sm font-medium">Auto-Update</label>
-              <input type="checkbox" class="rounded" style="accent-color:var(--primary)" checked>
-            </div>
-            <div style="background:var(--surface)" class="p-4 rounded-lg">
-              <label style="color:var(--text)" class="block text-sm font-medium mb-2">Default Currency</label>
-              <select class="w-full px-3 py-2 rounded-lg text-sm" style="background:var(--bg);color:var(--text);">
-                <option value="usd">USD ($)</option>
-                <option value="eur">EUR (€)</option>
-                <option value="gbp">GBP (£)</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- AI Preferences Section -->
-        <div id="settings-ai-preferences" class="settings-content-section max-w-4xl hidden">
-          <h2 style="color:var(--text)" class="text-2xl font-semibold mb-6">AI Preferences</h2>
-          <div class="space-y-4">
-            <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
-              <label style="color:var(--text)" class="text-sm font-medium">AI Recommendations</label>
-              <input type="checkbox" class="rounded" style="accent-color:var(--primary)" checked>
-            </div>
-            <div style="background:var(--surface)" class="p-4 rounded-lg">
-              <label style="color:var(--text)" class="block text-sm font-medium mb-2">Preferred AI Model</label>
-              <select class="w-full px-3 py-2 rounded-lg text-sm" style="background:var(--bg);color:var(--text);">
-                <option>GPT-4</option>
-                <option>Claude 3</option>
-                <option>Gemini Pro</option>
-              </select>
-            </div>
-            <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
-              <label style="color:var(--text)" class="text-sm font-medium">Data Training Opt-in</label>
-              <input type="checkbox" class="rounded" style="accent-color:var(--primary)">
-            </div>
-          </div>
-        </div>
-
-        <!-- Integrations Section -->
-        <div id="settings-integrations" class="settings-content-section max-w-4xl hidden">
-          <h2 style="color:var(--text)" class="text-2xl font-semibold mb-6">Integrations</h2>
-          <div class="space-y-4">
-            <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
-              <div>
-                <label style="color:var(--text)" class="block text-sm font-medium">Slack</label>
-                <p style="color:var(--secondary)" class="text-xs">Send notifications to Slack</p>
-              </div>
-              <button style="background:var(--primary);color:white" class="px-3 py-1 rounded text-xs font-medium">Connect</button>
-            </div>
-            <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
-              <div>
-                <label style="color:var(--text)" class="block text-sm font-medium">Discord</label>
-                <p style="color:var(--secondary)" class="text-xs">Get alerts on Discord</p>
-              </div>
-              <button style="background:var(--primary);color:white" class="px-3 py-1 rounded text-xs font-medium">Connect</button>
-            </div>
-            <div style="background:var(--surface)" class="p-4 rounded-lg flex items-center justify-between">
-              <div>
-                <label style="color:var(--text)" class="block text-sm font-medium">Zapier</label>
-                <p style="color:var(--secondary)" class="text-xs">Automate workflows</p>
-              </div>
-              <button style="background:var(--primary);color:white" class="px-3 py-1 rounded text-xs font-medium">Connect</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Support Section -->
-        <div id="settings-support" class="settings-content-section max-w-4xl hidden">
-          <h2 style="color:var(--text)" class="text-2xl font-semibold mb-6">Support</h2>
-          <div class="space-y-4">
-            <button style="background:var(--surface);color:var(--secondary)" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80">Documentation</button>
-            <button style="background:var(--surface);color:var(--secondary)" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80">Contact Support</button>
-            <button style="background:var(--surface);color:var(--secondary)" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80">Report Bug</button>
-            <button style="background:var(--surface);color:var(--secondary)" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80">FAQ</button>
-          </div>
-        </div>
-
-        <!-- About / Legal Section -->
-        <div id="settings-legal" class="settings-content-section max-w-4xl hidden">
-          <h2 style="color:var(--text)" class="text-2xl font-semibold mb-6">About / Legal</h2>
-          <div class="space-y-4">
-            <div style="background:var(--surface)" class="p-4 rounded-lg">
-              <label style="color:var(--text)" class="block text-sm font-medium mb-2">App Version</label>
-              <p style="color:var(--text)">v2.1.0</p>
-            </div>
-            <button style="background:var(--surface);color:var(--secondary)" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80">Terms of Service</button>
-            <button style="background:var(--surface);color:var(--secondary)" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80">Privacy Policy</button>
-            <button style="background:var(--surface);color:var(--secondary)" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80">License</button>
-            <button style="background:var(--surface);color:var(--secondary)" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80">Credits</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <script>
-const tools = [
-  // Web Builder section
-  { name:"Wix AI", cat:"Web Builder", rating:4.6, price:"$300/yr", desc:"AI-powered website builder", features:["Drag & drop","AI design","Mobile ready"], icon:"layout" }
-];
+const tools = [];
 
 // Load tools from localStorage on startup
 function loadToolsFromStorage() {
@@ -655,77 +415,8 @@ function showToast(message, bgColor = '#16a34a') {
   setTimeout(() => d.remove(), 3500);
 }
 
-function safeQueryAccountValues() {
-  let accountCard = null;
-  document.querySelectorAll('h3').forEach(h => { if (h.textContent.trim() === 'Account') accountCard = h.closest('div'); });
-  if (!accountCard) return null;
-  const values = accountCard.querySelectorAll('.text-sm');
-  return { card: accountCard, nameEl: values[0], emailEl: values[1] };
-}
+// Settings handlers removed
 
-const editBtn = document.getElementById('editProfileBtn');
-if (editBtn) {
-  editBtn.addEventListener('click', () => {
-    const info = safeQueryAccountValues();
-    const currentName = info && info.nameEl ? info.nameEl.textContent.trim() : '';
-    const currentEmail = info && info.emailEl ? info.emailEl.textContent.trim() : '';
-    const modal = createModal(`
-      <h3 class="text-lg font-semibold mb-3" style="color:var(--text)">Edit Profile</h3>
-      <div class="space-y-3">
-        <label class="text-xs opacity-75">Name</label>
-        <input id="ep_name" class="w-full px-3 py-2 rounded-lg" value="${currentName}" style="background:var(--bg);color:var(--text);" />
-        <label class="text-xs opacity-75">Email</label>
-        <input id="ep_email" class="w-full px-3 py-2 rounded-lg" value="${currentEmail}" style="background:var(--bg);color:var(--text);" />
-        <div class="flex gap-2 mt-3">
-          <button id="ep_cancel" class="flex-1 px-3 py-2 rounded-lg" style="background:var(--surface);color:var(--secondary)">Cancel</button>
-          <button id="ep_save" class="flex-1 px-3 py-2 rounded-lg text-white" style="background:var(--primary)">Save</button>
-        </div>
-      </div>
-    `);
-
-    modal.querySelector('#ep_cancel').addEventListener('click', () => modal.remove());
-    modal.querySelector('#ep_save').addEventListener('click', () => {
-      const newName = modal.querySelector('#ep_name').value.trim();
-      const newEmail = modal.querySelector('#ep_email').value.trim();
-      const info2 = safeQueryAccountValues();
-      if (info2 && info2.nameEl) info2.nameEl.textContent = newName || '—';
-      if (info2 && info2.emailEl) info2.emailEl.textContent = newEmail || '—';
-      modal.remove();
-      showToast('Profile updated');
-    });
-  });
-}
-
-const manageBtn = document.getElementById('manageBillingBtn');
-if (manageBtn) {
-  manageBtn.addEventListener('click', () => {
-    const paymentMethods = [
-      {id:1, label:'Visa •••• 4242'},
-      {id:2, label:'Mastercard •••• 1287'},
-      {id:3, label:'PayPal john@example.com'}
-    ];
-    const listHtml = paymentMethods.map(p => `<button data-id="${p.id}" class="w-full text-left px-3 py-2 rounded-lg hover:bg-[rgba(108,92,231,0.08)]" style="color:var(--text)">${p.label}</button>`).join('');
-    const modal = createModal(`
-      <h3 class="text-lg font-semibold mb-3" style="color:var(--text)">Manage Payment Methods</h3>
-      <div class="space-y-2">${listHtml}</div>
-      <div class="flex gap-2 mt-4">
-        <button id="pm_add" class="flex-1 px-3 py-2 rounded-lg" style="background:var(--surface);color:var(--secondary)">+ Add Payment Method</button>
-        <button id="pm_close" class="flex-1 px-3 py-2 rounded-lg text-white" style="background:var(--primary)">Close</button>
-      </div>
-    `);
-
-    modal.querySelectorAll('[data-id]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const id = e.currentTarget.dataset.id;
-        const pm = paymentMethods.find(x => String(x.id) === String(id));
-        if (pm) showToast(pm.label + ' selected');
-      });
-    });
-
-    modal.querySelector('#pm_close').addEventListener('click', () => modal.remove());
-    modal.querySelector('#pm_add').addEventListener('click', () => showToast('Add payment flow not implemented', '#2563eb'));
-  });
-}
 // Element SDK
 const defaultConfig = {
   page_title: "AI Tools Marketplace",
@@ -784,7 +475,7 @@ document.addEventListener('DOMContentLoaded', () => {
   try {
     const user = JSON.parse(localStorage.getItem('auth_user'));
     if (user && user.name) {
-      document.getElementById('pageTitle').textContent = 'Welcome, ' + user.name + '!';
+      document.getElementById('pageTitle').textContent = 'Welcome back';
     }
   } catch (e) {}
   
@@ -796,69 +487,398 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 100);
 });
 
-// Settings Page Handlers
-function populateSettingsPage() {
-  try {
-    const user = JSON.parse(localStorage.getItem('auth_user'));
-    if (user) {
-      // Update Account section - find and update the text content
-      const accountCards = document.querySelectorAll('#settingsPage [style*="--surface"]');
-      accountCards.forEach(card => {
-        const heading = card.querySelector('h3');
-        if (heading && heading.textContent === 'Account') {
-          const fields = card.querySelectorAll('.space-y-3 > div p:not([style*="opacity"])');
-          if (fields[0]) fields[0].textContent = user.name || 'User';
-          if (fields[1]) fields[1].textContent = user.email || 'N/A';
-        }
-      });
-    }
-  } catch (e) {
-    console.error('Error populating settings:', e);
-  }
-}
+// Settings Page Handlers - Removed
 
-document.getElementById('openSettingsBtn').addEventListener('click', () => {
-  document.getElementById('app').classList.add('hidden');
-  document.getElementById('settingsPage').classList.remove('hidden');
-  populateSettingsPage();
+
+document.getElementById('logoutBtn').addEventListener('click', logout);
+
+// Settings button handler
+document.getElementById('settingsBtn').addEventListener('click', () => {
+  const overlay = document.createElement('div');
+  overlay.className = 'fixed inset-0 z-50 flex items-center justify-center p-4';
+  overlay.style.background = 'rgba(0,0,0,0.7)';
+  
+  const box = document.createElement('div');
+  box.className = 'rounded-2xl w-full max-w-md p-6';
+  box.style.background = 'var(--surface)';
+  box.innerHTML = `
+    <div class="flex items-center justify-between mb-6">
+      <h2 style="color:var(--text)" class="text-2xl font-semibold">Settings</h2>
+      <button id="closeSettingsBtn" class="text-gray-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+    </div>
+    
+    <div class="space-y-3">
+      <button id="settingNotifications" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80" style="background:rgba(108,92,231,0.1);color:var(--text)">
+        <div class="flex items-center gap-2">
+          <i data-lucide="bell" class="w-4 h-4"></i>
+          <span>Notifications</span>
+        </div>
+      </button>
+      
+      <button id="settingPrivacy" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80" style="background:rgba(108,92,231,0.1);color:var(--text)">
+        <div class="flex items-center gap-2">
+          <i data-lucide="lock" class="w-4 h-4"></i>
+          <span>Privacy & Security</span>
+        </div>
+      </button>
+      
+      <button id="settingPayment" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80" style="background:rgba(108,92,231,0.1);color:var(--text)">
+        <div class="flex items-center gap-2">
+          <i data-lucide="credit-card" class="w-4 h-4"></i>
+          <span>Payment</span>
+        </div>
+      </button>
+      
+      <button id="settingHelp" class="w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80" style="background:rgba(108,92,231,0.1);color:var(--text)">
+        <div class="flex items-center gap-2">
+          <i data-lucide="help-circle" class="w-4 h-4"></i>
+          <span>Help & Support</span>
+        </div>
+      </button>
+    </div>
+    
+    <button id="closeSettingsBtn2" class="w-full mt-6 px-4 py-2 rounded-lg text-sm font-medium text-white transition-all hover:opacity-90" style="background:var(--primary)">Close</button>
+  `;
+  
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+  
+  overlay.querySelector('#closeSettingsBtn').addEventListener('click', () => overlay.remove());
+  overlay.querySelector('#closeSettingsBtn2').addEventListener('click', () => overlay.remove());
+  
+  overlay.querySelector('#settingNotifications').addEventListener('click', () => {
+    showToast('Notifications settings coming soon');
+  });
+  
+  overlay.querySelector('#settingPrivacy').addEventListener('click', () => {
+    showToast('Privacy & Security settings coming soon');
+  });
+  
+  overlay.querySelector('#settingPayment').addEventListener('click', () => {
+    overlay.remove();
+    
+    // Show payment options modal
+    const paymentOverlay = document.createElement('div');
+    paymentOverlay.className = 'fixed inset-0 z-50 flex items-center justify-center p-4';
+    paymentOverlay.style.background = 'rgba(0,0,0,0.7)';
+    
+    const paymentBox = document.createElement('div');
+    paymentBox.className = 'rounded-2xl w-full max-w-md p-6';
+    paymentBox.style.background = 'var(--surface)';
+    paymentBox.innerHTML = `
+      <div class="flex items-center justify-between mb-6">
+        <h2 style="color:var(--text)" class="text-2xl font-semibold">Payment Methods</h2>
+        <button id="closePaymentBtn" class="text-gray-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      
+      <div class="space-y-3">
+        <button class="paymentMethod w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80" data-method="BTC" style="background:rgba(108,92,231,0.1);color:var(--text)">
+          <div class="flex items-center gap-2">
+            <span class="font-semibold">₿ BTC</span>
+            <span class="text-xs opacity-60">Bitcoin</span>
+          </div>
+        </button>
+        
+        <button class="paymentMethod w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80" data-method="ETHEREUM" style="background:rgba(108,92,231,0.1);color:var(--text)">
+          <div class="flex items-center gap-2">
+            <span class="font-semibold">Ξ ETH</span>
+            <span class="text-xs opacity-60">Ethereum</span>
+          </div>
+        </button>
+        
+        <button class="paymentMethod w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80" data-method="USDT_TRX" style="background:rgba(108,92,231,0.1);color:var(--text)">
+          <div class="flex items-center gap-2">
+            <span class="font-semibold">₮ USDT (TRX)</span>
+            <span class="text-xs opacity-60">Tron Network</span>
+          </div>
+        </button>
+        
+        <button class="paymentMethod w-full text-left px-4 py-3 rounded-lg text-sm transition-all hover:opacity-80" data-method="USDT_BNB" style="background:rgba(108,92,231,0.1);color:var(--text)">
+          <div class="flex items-center gap-2">
+            <span class="font-semibold">₮ USDT (BNB)</span>
+            <span class="text-xs opacity-60">BSC Network</span>
+          </div>
+        </button>
+      </div>
+      
+      <button id="closePaymentBtn2" class="w-full mt-6 px-4 py-2 rounded-lg text-sm font-medium text-white transition-all hover:opacity-90" style="background:var(--primary)">Close</button>
+    `;
+    
+    paymentOverlay.appendChild(paymentBox);
+    document.body.appendChild(paymentOverlay);
+    
+    const paymentMethods = {
+      'BTC': 'bc1qrg0gn9w0e945cpdvk72435fr0xr6lxwz8wqrt2',
+      'ETHEREUM': '0xc0c049aEbD387Ec2C01CCCE70d0645DE0937aeD1',
+      'USDT_TRX': 'TPXbSAKwyP7UZikCZXAxNHaJ31W31u32FQ',
+      'USDT_BNB': '0xc0c049aEbD387Ec2C01CCCE70d0645DE0937aeD1'
+    };
+    
+    paymentBox.querySelectorAll('.paymentMethod').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const method = btn.dataset.method;
+        const address = paymentMethods[method];
+        paymentOverlay.remove();
+        showPaymentForm(method, address);
+      });
+    });
+    
+    paymentBox.querySelector('#closePaymentBtn').addEventListener('click', () => paymentOverlay.remove());
+    paymentBox.querySelector('#closePaymentBtn2').addEventListener('click', () => paymentOverlay.remove());
+    
+    paymentOverlay.addEventListener('click', (e) => {
+      if (e.target === paymentOverlay) paymentOverlay.remove();
+    });
+    
+    lucide.createIcons();
+  });
+  
+  overlay.querySelector('#settingHelp').addEventListener('click', () => {
+    showToast('Help & Support coming soon');
+  });
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+  
   lucide.createIcons();
 });
 
-document.getElementById('backFromSettingsBtn').addEventListener('click', () => {
-  document.getElementById('settingsPage').classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
-});
+function showPaymentForm(method, address) {
+  const formOverlay = document.createElement('div');
+  formOverlay.className = 'fixed inset-0 z-50 flex items-center justify-center p-4';
+  formOverlay.style.background = 'rgba(0,0,0,0.7)';
+  
+  const formBox = document.createElement('div');
+  formBox.className = 'rounded-2xl w-full max-w-md p-6';
+  formBox.style.background = 'var(--surface)';
+  formBox.innerHTML = `
+    <div class="flex items-center justify-between mb-6">
+      <h2 style="color:var(--text)" class="text-2xl font-semibold">Send Payment</h2>
+      <button id="closeFormBtn" class="text-gray-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+    </div>
+    
+    <div class="space-y-4">
+      <div style="background:rgba(108,92,231,0.1)" class="p-4 rounded-lg">
+        <p style="color:var(--secondary)" class="text-xs opacity-75 mb-2">Sending to: ${method}</p>
+        <p style="color:var(--text)" class="text-xs font-mono break-all">${address}</p>
+        <button id="copyAddressBtn" class="mt-2 text-xs px-2 py-1 rounded text-white transition-all hover:opacity-90" style="background:var(--primary)">Copy Address</button>
+      </div>
+      
+      <div>
+        <p style="color:var(--secondary)" class="text-xs opacity-75 mb-2">Amount (USD)</p>
+        <input id="paymentAmount" type="number" placeholder="Enter amount in USD" min="1" class="w-full px-3 py-2 rounded-lg text-sm" style="background:rgba(108,92,231,0.1);color:var(--text);border:1px solid rgba(108,92,231,0.3)" />
+      </div>
+      
+      <div style="background:rgba(108,92,231,0.05);border:1px solid rgba(108,92,231,0.2)" class="p-3 rounded-lg">
+        <p style="color:var(--secondary)" class="text-xs mb-2"> Instructions:</p>
+        <p style="color:var(--text)" class="text-xs">1. Copy the address above</p>
+        <p style="color:var(--text)" class="text-xs">2. Send the specified amount</p>
+        <p style="color:var(--text)" class="text-xs">3. Click "I have made payment" when done</p>
+      </div>
+    </div>
+    
+    <div class="flex gap-2 mt-6">
+      <button id="cancelPaymentForm" class="flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-90" style="background:rgba(255,255,255,0.06);color:var(--text)">Cancel</button>
+      <button id="confirmPaymentBtn" class="flex-1 px-4 py-2 rounded-lg text-sm font-medium text-white transition-all hover:opacity-90" style="background:var(--primary)">I have made payment</button>
+    </div>
+  `;
+  
+  formOverlay.appendChild(formBox);
+  document.body.appendChild(formOverlay);
+  
+  formBox.querySelector('#copyAddressBtn').addEventListener('click', () => {
+    navigator.clipboard.writeText(address).then(() => {
+      showToast('Address copied to clipboard');
+    });
+  });
+  
+  formBox.querySelector('#closeFormBtn').addEventListener('click', () => formOverlay.remove());
+  formBox.querySelector('#cancelPaymentForm').addEventListener('click', () => formOverlay.remove());
+  
+  formBox.querySelector('#confirmPaymentBtn').addEventListener('click', () => {
+    const amount = formBox.querySelector('#paymentAmount').value.trim();
+    
+    if (!amount) {
+      showToast('Please enter an amount', '#ef4444');
+      return;
+    }
+    
+    const numAmount = parseFloat(amount);
+    if (numAmount <= 0) {
+      showToast('Amount must be greater than 0', '#ef4444');
+      return;
+    }
+    
+    formOverlay.remove();
+    showPaymentConfirmation(method, address, numAmount);
+  });
+  
+  formOverlay.addEventListener('click', (e) => {
+    if (e.target === formOverlay) formOverlay.remove();
+  });
+  
+  lucide.createIcons();
+}
 
-// Settings menu navigation
-document.querySelectorAll('.settings-menu-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const section = btn.dataset.section;
+function showPaymentConfirmation(method, address, amount) {
+  const confirmOverlay = document.createElement('div');
+  confirmOverlay.className = 'fixed inset-0 z-50 flex items-center justify-center p-4';
+  confirmOverlay.style.background = 'rgba(0,0,0,0.7)';
+  
+  const confirmBox = document.createElement('div');
+  confirmBox.className = 'rounded-2xl w-full max-w-md p-6';
+  confirmBox.style.background = 'var(--surface)';
+  confirmBox.innerHTML = `
+    <div class="flex items-center justify-between mb-6">
+      <h2 style="color:var(--text)" class="text-2xl font-semibold">Confirm Payment</h2>
+      <button id="closeConfirmBtn" class="text-gray-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+    </div>
     
-    // Update active button style
-    document.querySelectorAll('.settings-menu-btn').forEach(b => {
-      b.classList.remove('active');
-      b.style.background = 'transparent';
-      b.style.color = 'var(--secondary)';
-    });
-    btn.classList.add('active');
-    btn.style.background = 'var(--primary)';
-    btn.style.color = 'white';
+    <div style="background:rgba(108,92,231,0.1)" class="p-4 rounded-lg mb-4">
+      <div class="flex justify-between mb-2">
+        <p style="color:var(--secondary)" class="text-xs">Payment Method:</p>
+        <p style="color:var(--text)" class="text-sm font-semibold">${method}</p>
+      </div>
+      <div class="flex justify-between">
+        <p style="color:var(--secondary)" class="text-xs">Amount:</p>
+        <p style="color:var(--text)" class="text-sm font-semibold">$${amount}</p>
+      </div>
+    </div>
     
-    // Hide all sections
-    document.querySelectorAll('.settings-content-section').forEach(sec => {
-      sec.classList.add('hidden');
-    });
+    <div style="background:rgba(108,92,231,0.05);border:1px solid rgba(108,92,231,0.2)" class="p-3 rounded-lg mb-4">
+      <p style="color:var(--text)" class="text-xs mb-2"><strong>⏳ Pending Confirmation</strong></p>
+      <p style="color:var(--secondary)" class="text-xs">Your payment is being processed. An admin will confirm the transaction and it will appear on your dashboard soon.</p>
+    </div>
     
-    // Show selected section
-    const selectedSection = document.getElementById('settings-' + section);
-    if (selectedSection) {
-      selectedSection.classList.remove('hidden');
+    <div class="flex gap-2">
+      <button id="cancelConfirmBtn" class="flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-90" style="background:rgba(255,255,255,0.06);color:var(--text)">Cancel</button>
+      <button id="submitPaymentBtn" class="flex-1 px-4 py-2 rounded-lg text-sm font-medium text-white transition-all hover:opacity-90" style="background:var(--primary)">Submit</button>
+    </div>
+  `;
+  
+  confirmOverlay.appendChild(confirmBox);
+  document.body.appendChild(confirmOverlay);
+  
+  confirmBox.querySelector('#closeConfirmBtn').addEventListener('click', () => confirmOverlay.remove());
+  confirmBox.querySelector('#cancelConfirmBtn').addEventListener('click', () => confirmOverlay.remove());
+  
+  confirmBox.querySelector('#submitPaymentBtn').addEventListener('click', async () => {
+    confirmBox.querySelector('#submitPaymentBtn').textContent = 'Processing...';
+    confirmBox.querySelector('#submitPaymentBtn').disabled = true;
+    
+    try {
+      const token = localStorage.getItem('auth_token');
+      if (!token) {
+        showToast('Not authenticated', '#ef4444');
+        confirmOverlay.remove();
+        return;
+      }
+      
+      // Send payment confirmation to backend
+      const response = await fetch('https://nexusbackend-vpu0.onrender.com/api/payment-confirm', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          method: method,
+          wallet_address: address,
+          amount_usd: parseFloat(amount)
+        })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        showToast(error.error || 'Payment submission failed', '#ef4444');
+        confirmOverlay.remove();
+        return;
+      }
+      
+      confirmOverlay.remove();
+      showToast('Payment submitted! Awaiting admin confirmation.', '#10b981');
+    } catch (error) {
+      console.error('Payment error:', error);
+      showToast('Error submitting payment', '#ef4444');
+      confirmOverlay.remove();
     }
   });
-});
+  
+  confirmOverlay.addEventListener('click', (e) => {
+    if (e.target === confirmOverlay) confirmOverlay.remove();
+  });
+  
+  lucide.createIcons();
+}
 
-// Logout button handler
-document.getElementById('logoutBtn').addEventListener('click', logout);
+// Profile button handler
+document.getElementById('profileBtn').addEventListener('click', () => {
+  const user = JSON.parse(localStorage.getItem('auth_user')) || {};
+  const overlay = document.createElement('div');
+  overlay.className = 'fixed inset-0 z-50 flex items-center justify-center p-4';
+  overlay.style.background = 'rgba(0,0,0,0.7)';
+  
+  const box = document.createElement('div');
+  box.className = 'rounded-2xl w-full max-w-md p-6';
+  box.style.background = 'var(--surface)';
+  box.innerHTML = `
+    <div class="flex items-center justify-between mb-6">
+      <h2 style="color:var(--text)" class="text-2xl font-semibold">Profile</h2>
+      <button id="closeProfileBtn" class="text-gray-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+    </div>
+    
+    <div class="space-y-4">
+      <div>
+        <p style="color:var(--secondary)" class="text-xs opacity-75 mb-2">Full Name</p>
+        <input id="profileName" type="text" value="${user.name || ''}" class="w-full px-3 py-2 rounded-lg text-sm" style="background:rgba(108,92,231,0.1);color:var(--text);border:1px solid rgba(108,92,231,0.3)" />
+      </div>
+      
+      <div>
+        <p style="color:var(--secondary)" class="text-xs opacity-75 mb-2">Email</p>
+        <input id="profileEmail" type="email" value="${user.email || ''}" class="w-full px-3 py-2 rounded-lg text-sm" style="background:rgba(108,92,231,0.1);color:var(--text);border:1px solid rgba(108,92,231,0.3)" />
+      </div>
+    </div>
+    
+    <div class="flex gap-2 mt-6">
+      <button id="cancelProfileBtn" class="flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-90" style="background:rgba(255,255,255,0.06);color:var(--text)">Cancel</button>
+      <button id="saveProfileBtn" class="flex-1 px-4 py-2 rounded-lg text-sm font-medium text-white transition-all hover:opacity-90" style="background:var(--primary)">Save</button>
+    </div>
+  `;
+  
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+  
+  overlay.querySelector('#closeProfileBtn').addEventListener('click', () => overlay.remove());
+  overlay.querySelector('#cancelProfileBtn').addEventListener('click', () => overlay.remove());
+  
+  overlay.querySelector('#saveProfileBtn').addEventListener('click', () => {
+    const newName = overlay.querySelector('#profileName').value.trim();
+    const newEmail = overlay.querySelector('#profileEmail').value.trim();
+    
+    if (!newName) {
+      showToast('Name cannot be empty', '#ef4444');
+      return;
+    }
+    if (!newEmail) {
+      showToast('Email cannot be empty', '#ef4444');
+      return;
+    }
+    
+    // Update localStorage
+    const updatedUser = { ...user, name: newName, email: newEmail };
+    localStorage.setItem('auth_user', JSON.stringify(updatedUser));
+    
+    overlay.remove();
+    showToast('Profile updated successfully');
+  });
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+  
+  lucide.createIcons();
+});
 </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f03241e733fbeb4',t:'MTc3Njg0NTMxMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
  </html
