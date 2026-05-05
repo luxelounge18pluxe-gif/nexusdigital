@@ -101,13 +101,25 @@ function togglePassword(inputId, btnId) {
 }
 
 async function postJSON(url, body) {
-  const res = await fetch(url, { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify(body) });
-  return res.json().then(j => ({ ok: res.ok, status: res.status, body: j })).catch(e => ({ ok:false, status:0, body:{error: e.message} }));
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+  try {
+    const res = await fetch(url, { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify(body), signal: controller.signal });
+    clearTimeout(timeoutId);
+    return res.json().then(j => ({ ok: res.ok, status: res.status, body: j })).catch(e => ({ ok:false, status:0, body:{error: e.message} }));
+  } catch (e) {
+    clearTimeout(timeoutId);
+    return { ok: false, status: 0, body: { error: e.name === 'AbortError' ? 'Request timeout - server may be down' : e.message } };
+  }
 }
 
 function showMsg(txt, ok=true) {
   const el = document.getElementById('msg');
   el.textContent = txt; el.style.color = ok ? '#86efac' : '#fca5a5';
+}
+function hideLoadingModal() {
+  const modal = document.getElementById('loadingModal');
+  modal.style.display = 'none';
 }
 
 document.getElementById('signupBtn').addEventListener('click', async () => {
@@ -123,12 +135,13 @@ document.getElementById('signupBtn').addEventListener('click', async () => {
   if (password.length < 6) return showMsg('Password must be at least 6 characters', false);
   
   // Show loading modal
-  document.getElementById('loadingModal').classList.remove('hidden');
+  const modal = document.getElementById('loadingModal');
+  modal.style.display = 'flex';
   
   const r = await postJSON('https://nexusbackend-vpu0.onrender.com/api/signup', { name, email, password });
   
-  // Hide loading modal
-  document.getElementById('loadingModal').classList.add('hidden');
+  // Hide loading modal - guarantee visibility is hidden
+  hideLoadingModal();
   
   if (!r.ok) return showMsg(r.body && r.body.error ? r.body.error : 'Sign up failed', false);
   // store token locally
