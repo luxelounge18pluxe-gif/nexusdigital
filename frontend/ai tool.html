@@ -26,7 +26,7 @@ html, body { height: 100%; margin: 0; }
    <header class="px-5 pt-5 pb-3 flex items-center justify-between flex-shrink-0">
     <div class="flex items-center gap-3">
      <button id="profileBtn" class="w-9 h-9 rounded-xl flex items-center justify-center hover:opacity-80 transition-all" style="background:var(--surface)"><i data-lucide="user" class="w-4 h-4" style="color:var(--secondary)"></i></button>
-     <h1 id="pageTitle" class="text-lg font-bold" style="color:var(--text)">Hi! </h1>
+     <h1 id="pageTitle" class="text-sm font-bold" style="color:var(--text)">Hi</h1>
     </div>
     <div class="flex items-center gap-3">
      <div class="px-3 py-1.5 rounded-xl text-sm font-semibold" style="background:var(--surface);color:var(--primary)">
@@ -475,7 +475,8 @@ document.addEventListener('DOMContentLoaded', () => {
   try {
     const user = JSON.parse(localStorage.getItem('auth_user'));
     if (user && user.name) {
-      document.getElementById('pageTitle').textContent = 'Hi!';
+      const firstName = user.name.split(' ')[0];
+      document.getElementById('pageTitle').textContent = `Hi ${firstName}`;
     }
   } catch (e) {}
   
